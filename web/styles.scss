@@ -1,0 +1,21 @@
+$font-family-base: "Montserrat";
+
+@import 'bootstrap/scss/bootstrap';
+@import url(https://fonts.googleapis.com/css?family=Roboto|Montserrat);
+@import url(https://fonts.googleapis.com/css?family=Material+Icons);
+
+.a {
+  color: blue;
+}
+
+.c {
+  color: $body-color;
+}
+
+body {
+  margin: 0;
+}
+
+* {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+}

@@ -1,0 +1,25 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Lak</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a [routerLink]="RoutePaths.home.toUrl()" [routerLinkActive]="'active'" class="nav-link" aria-current="page">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a [routerLink]="RoutePaths.keyboard.toUrl()" [routerLinkActive]="'active'" class="nav-link">Keyboard</a>
+                </li>
+                <li class="nav-item">
+                    <a [routerLink]="RoutePaths.soundMixer.toUrl()" [routerLinkActive]="'active'" class="nav-link">Sound Mixer</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container col-8 offset-md-2">
+    <router-outlet [routes]="Routes.all"></router-outlet>
+</div>

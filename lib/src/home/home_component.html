@@ -1,0 +1,25 @@
+<div class="row text-center mb-5">
+    <h2 class="display-2">LAK</h2>
+    <h3 class="text-muted">Loud Ass Keyboard</h3>
+</div>
+
+<div class="row">
+    <div class="col-md-4 offset-md-1">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">View Sound Mixer</h5>
+                <p class="card-text">View sounds & the sound mixer</p>
+                <a [routerLink]="RoutePaths.soundMixer.toUrl()" class="btn btn-primary">Sound Mixer</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">View Keyboard</h5>
+                <p class="card-text">View the keyboard's keys and other data</p>
+                <a [routerLink]="RoutePaths.keyboard.toUrl()" class="btn btn-primary">Keyboard</a>
+            </div>
+        </div>
+    </div>
+</div>
