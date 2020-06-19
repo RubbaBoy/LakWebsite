@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:LakWebsite/src/icon/icon_component.dart';
+import 'package:LakWebsite/src/services/objects/sound.dart';
+import 'package:LakWebsite/src/services/request_utils.dart';
 import 'package:angular/angular.dart';
 
 @Component(
@@ -12,13 +14,23 @@ import 'package:angular/angular.dart';
     NgFor,
     NgIf,
   ],
-  providers: [],
+  providers: [
+    ClassProvider(RequestService),
+  ],
 )
 class SoundMixerComponent implements OnInit {
+
+  final RequestService requestService;
+
+  SoundMixerComponent(this.requestService);
+
+  List<Sound> sounds;
 
   @override
   void ngOnInit() {
     print('Sound Mixer Init');
+
+    requestService.listSounds().then((value) => sounds = value);
   }
 
 }
