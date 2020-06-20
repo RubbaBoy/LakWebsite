@@ -1,21 +1,47 @@
 <div class="container">
     <h1 class="mb-3">Soundboard</h1>
-    <div class="d-flex flex-sm-wrap">
-        <div class="col-md-12 col-lg-3">
-            <ul class="list-group">
-                <li *ngFor="let sound of sounds" class="list-group-item">{{ sound.uri.pathSegments.last }}</li>
-                <li class="list-group-item">
+    <div class="d-flex flex-wrap">
+        <div class="col-12 col-lg-3">
+            <div class="list-group">
+                <a *ngFor="let sound of sounds" [class.active]="sound == active" class="list-group-item list-group-item-action" (click)="showPanel(sound)">{{ sound.uri.pathSegments.last }}</a>
+                <a class="list-group-item list-group-item-action" (click)="addSound()">
                     <icon icon="plus" class="clickable-icon mx-auto"></icon>
-                </li>
-            </ul>
+                </a>
+            </div>
         </div>
 
-        <div class="col-md-12 col-lg-8 offset-lg-1 mt-md-4 mt-lg-0">
+        <div class="col-12 col-lg-8 offset-lg-1 mt-4 mt-lg-0">
             <div class="card">
                 <div class="card-body">
-                    This is some text within a card body.
+                    Inspecting sound {{ active?.id }}<br>
+                    Its path: {{ active?.uri }}
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<lak-modal #addModal [title]="'Add Sound Variant'">
+    <p>
+        Add a variant for the sound {{ addModal['sound']?.uri?.pathSegments?.last }}
+    </p>
+
+    <div class="row">
+        <label for="nameInput" class="col-3 col-form-label" >Variant Name</label>
+        <div class="col-9">
+            <input #nameInput class="form-control mb-3" id="nameInput" placeholder="Name">
+        </div>
+    </div>
+
+    <div class="row">
+        <label for="pathInput" class="col-3 col-form-label" >Variant Path</label>
+        <div class="col-9">
+            <input #pathInput class="form-control mb-3" id="pathInput" placeholder="Path">
+        </div>
+    </div>
+
+    <div button>
+        <button type="button" class="btn btn-secondary" (click)="addModal.cancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="addModal.confirm()">Add Variant</button>
+    </div>
+</lak-modal>

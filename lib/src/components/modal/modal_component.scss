@@ -1,0 +1,10 @@
+.modal {
+//    visibility: hidden;
+    &.show {
+        display: block;
+//        //transition-property: visibility;
+//        //transition-duration: 0.5s;
+//        visibility: inherit;
+//    }
+    }
+}
