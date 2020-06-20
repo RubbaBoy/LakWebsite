@@ -1,47 +1,86 @@
 <div class="container">
     <h1 class="mb-3">Soundboard</h1>
     <div class="d-flex flex-wrap">
-        <div class="col-12 col-lg-3">
+        <div class="col-12 col-md-6 col-lg-2">
+            <h4>Sounds</h4>
+
             <div class="list-group">
-                <a *ngFor="let sound of sounds" [class.active]="sound == active" class="list-group-item list-group-item-action" (click)="showPanel(sound)">{{ sound.uri.pathSegments.last }}</a>
+                <a *ngFor="let sound of sounds" [class.active]="sound == activeSound" class="list-group-item list-group-item-action" (click)="clickSound(sound)">{{
+                    sound.uri.pathSegments.last }}</a>
                 <a class="list-group-item list-group-item-action" (click)="addSound()">
                     <icon icon="plus" class="clickable-icon mx-auto"></icon>
                 </a>
             </div>
         </div>
 
-        <div class="col-12 col-lg-8 offset-lg-1 mt-4 mt-lg-0">
+        <div class="col-12 col-md-6 col-lg-2 pl-md-2 mt-4 mt-md-0">
+            <h4>Variants</h4>
+
+            <div *ngIf="activeSound == null" class="list-group list-group-flush">
+                <div class="list-group-item text-muted pe-none">Click a sound to see its variants</div>
+            </div>
+
+            <div *ngIf="activeSound != null" class="list-group">
+                <a *ngFor="let variant of displayingVariants" [class.active]="variant == activeVariant" class="list-group-item list-group-item-action" (click)="clickVariant(variant)">{{
+                    variant.description }}</a>
+                <a class="list-group-item list-group-item-action" (click)="addVariant()">
+                    <icon icon="plus" class="clickable-icon mx-auto"></icon>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-8 pl-lg-4 mt-4 mt-lg-0">
             <div class="card">
                 <div class="card-body">
-                    Inspecting sound {{ active?.id }}<br>
-                    Its path: {{ active?.uri }}
+                    Inspecting sound {{ activeSound?.id }}<br>
+                    Its path: {{ activeSound?.uri }}<br>
+                    Variant ID: {{ activeVariant?.id }}<br>
+                    Variant Desc: {{ activeVariant?.description }}<br>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<lak-modal #addModal [title]="'Add Sound Variant'">
+<lak-modal #addSoundModal [title]="'Add Sound'">
     <p>
-        Add a variant for the sound {{ addModal['sound']?.uri?.pathSegments?.last }}
+        Add a sound by its local path
     </p>
 
     <div class="row">
-        <label for="nameInput" class="col-3 col-form-label" >Variant Name</label>
+        <label for="soundPathInput" class="col-3 col-form-label">Local Sound Path</label>
         <div class="col-9">
-            <input #nameInput class="form-control mb-3" id="nameInput" placeholder="Name">
-        </div>
-    </div>
-
-    <div class="row">
-        <label for="pathInput" class="col-3 col-form-label" >Variant Path</label>
-        <div class="col-9">
-            <input #pathInput class="form-control mb-3" id="pathInput" placeholder="Path">
+            <input class="form-control mb-3" id="soundPathInput" placeholder="Path">
         </div>
     </div>
 
     <div button>
-        <button type="button" class="btn btn-secondary" (click)="addModal.cancel()">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="addModal.confirm()">Add Variant</button>
+        <button type="button" class="btn btn-secondary" (click)="addSoundModal.cancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="addSoundModal.confirm()">Add Sound</button>
+    </div>
+</lak-modal>
+
+<lak-modal #addVariantModal [title]="'Add Sound Variant'">
+    <p>
+        Add a variant for the sound {{ addVariantModal['sound']?.uri?.pathSegments?.last }}
+    </p>
+
+    <div class="row">
+        <label for="variantNameInput" class="col-3 col-form-label">Variant Name</label>
+        <div class="col-9">
+            <input class="form-control mb-3" id="variantNameInput" placeholder="Name">
+        </div>
+    </div>
+
+    <div class="row">
+        <label for="variantPathInput" class="col-3 col-form-label">Variant Path</label>
+        <div class="col-9">
+            <input class="form-control mb-3" id="variantPathInput" placeholder="Path">
+        </div>
+    </div>
+
+    <div button>
+        <button type="button" class="btn btn-secondary" (click)="addVariantModal.cancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="addVariantModal.confirm()">Add Variant</button>
     </div>
 </lak-modal>

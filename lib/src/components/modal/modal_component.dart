@@ -19,8 +19,6 @@ class LakModalComponent {
   @Input()
   String title;
 
-  final HtmlElement _host;
-
   bool block = false;
 
   Map<String, dynamic> content = {};
@@ -37,7 +35,7 @@ class LakModalComponent {
 
   bool get show => _show;
 
-  LakModalComponent(this.changeRef, this._host);
+  LakModalComponent(this.changeRef);
 
   void cancel() {
     _hideStuff();
@@ -47,7 +45,7 @@ class LakModalComponent {
   void confirm() {
     _hideStuff();
 
-    onConfirm?.call(elementCallback.map((selector, callback) => MapEntry(selector, callback(querySelector('#$selector'))))
+    onConfirm?.call(elementCallback.map((selector, callback) => MapEntry(selector, callback(querySelector(selector))))
       ..removeWhere((key, value) => value == null));
   }
 

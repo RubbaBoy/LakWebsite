@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:LakWebsite/src/components/icon/icon_component.dart';
 import 'package:LakWebsite/src/components/modal/modal_component.dart';
 import 'package:LakWebsite/src/services/objects/sound.dart';
@@ -19,35 +17,56 @@ import 'package:angular/angular.dart';
   providers: [
     ClassProvider(RequestService),
   ],
+  pipes: [commonPipes],
 )
 class SoundMixerComponent implements OnInit {
   final RequestService requestService;
 
   SoundMixerComponent(this.requestService);
 
-  @ViewChild('addModal', read: LakModalComponent)
-  LakModalComponent addModal;
+  @ViewChild('addSoundModal', read: LakModalComponent)
+  LakModalComponent addSoundModal;
 
-  Sound active;
-  List<Sound> sounds;
+  @ViewChild('addVariantModal', read: LakModalComponent)
+  LakModalComponent addVariantModal;
+
+  Sound activeSound;
+  SoundVariant activeVariant;
+
+  List<Sound> sounds = const [];
+  List<SoundVariant> _allVariants = const [];
+  List<SoundVariant> displayingVariants = const [];
 
   @override
   void ngOnInit() {
     print('Sound Mixer Init');
 
     requestService.listSounds().then((value) => sounds = value);
+    requestService.listSoundVariants().then((value) => _allVariants = value);
   }
 
-  void showPanel(Sound sound) {
-    active = sound;
-    print('Showing panel for ${sound.id} | ${sound.uri}');
+  void clickSound(Sound sound) {
+    if (activeSound == sound) {
+      activeSound = null;
+      activeVariant = null;
+    } else {
+      activeSound = sound;
+
+      displayingVariants = _allVariants
+          .where((element) => element.sound == sound)
+          .toList(growable: false);
+      activeVariant = displayingVariants.first;
+    }
   }
+
+  void clickVariant(SoundVariant soundVariant) =>
+      activeVariant = activeVariant == soundVariant ? null : soundVariant;
 
   void addSound() {
     print('Adding sound!');
 
-    print('addModal = $addModal');
-    addModal.openPrompt(
+    print('addModal = $addSoundModal');
+    addSoundModal.openPrompt(
         onConfirm: (data) {
           print('Confirming in here');
           print('data = $data');
@@ -56,8 +75,26 @@ class SoundMixerComponent implements OnInit {
           print('Cancelling in here');
         },
         elementCallback: {
-          'nameInput': LakModalComponent.inputValue,
-          'pathInput': LakModalComponent.inputValue,
+          '#nameInput': LakModalComponent.inputValue,
+          '#pathInput': LakModalComponent.inputValue,
+        });
+  }
+
+  void addVariant() {
+    print('Adding sound variant');
+
+    addVariantModal.openPrompt(
+        content: {'sound': activeSound},
+        onConfirm: (data) {
+          print('Confirming in here');
+          print('data = $data');
+        },
+        onCancel: () {
+          print('Cancelling in here');
+        },
+        elementCallback: {
+          '#nameInput': LakModalComponent.inputValue,
+          '#pathInput': LakModalComponent.inputValue,
         });
   }
 }

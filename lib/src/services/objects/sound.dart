@@ -31,6 +31,14 @@ class Sound {
     'id': id,
     'uri': uri,
   };
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Sound && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 class SoundModulation {
@@ -76,4 +84,15 @@ class SoundVariant {
     'color': color,
     'modulators': modulators.map((modulator) => modulator.toJson()).toList(),
   };
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SoundVariant &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          sound == other.sound;
+
+  @override
+  int get hashCode => id.hashCode ^ sound.hashCode;
 }
