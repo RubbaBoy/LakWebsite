@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:angular/angular.dart';
 
 @Component(
-  selector: 'sound-mixer',
+  selector: 'keyboard',
   styleUrls: ['keyboard_component.css'],
   templateUrl: 'keyboard_component.html',
   directives: [

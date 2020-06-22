@@ -1,0 +1,11 @@
+$defaultKeySize: 35px;
+$bottomMargin: 6px;
+$functionBottomMargin: 16px;
+
+.keyboard-row {
+    height: $defaultKeySize + $bottomMargin;
+    margin-bottom: $bottomMargin;
+    &.top-spacing {
+        margin-bottom: $functionBottomMargin;
+    }
+}
