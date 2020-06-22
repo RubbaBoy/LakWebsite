@@ -3,9 +3,19 @@ $bottomMargin: 6px;
 $functionBottomMargin: 16px;
 
 .keyboard-row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+
     height: $defaultKeySize + $bottomMargin;
     margin-bottom: $bottomMargin;
     &.top-spacing {
         margin-bottom: $functionBottomMargin;
+    }
+
+    key.enter {
+        font-size: 12px;
     }
 }

@@ -5,22 +5,8 @@ $keyRadius: 3px;
 :host {
     cursor: pointer;
 
-    font-family: Roboto, Helvetica, Arial, sans-serif;
-    font-weight: 500; // Medium
-
-    //$keyWidth: 35px;
-    //$keyHeight: $keyWidth * 1.2;
-    //
-    //// The width of the individual left and right shadows of the key
-    //$rightShadow: $keyWidth * 0.2;
-    //$bottomShadow: $keyWidth * 0.22;
-    //
-    //$shadowWidth: $keyWidth + $rightShadow;
-    //$shadowHeight: $keyHeight + $bottomShadow;
-
     display: inline-block;
-    //width: $keyWidth;
-    //height: $keyHeight;
+    color: #FEFDFD;
 
     &.spacer {
         margin-top: -15px;
@@ -28,22 +14,52 @@ $keyRadius: 3px;
 
     &:not(.spacer) {
         margin: 0 $rightMargin + 6px $bottomMargin + 6px 0;
-        //margin: 0 $rightMargin + $rightShadow $bottomMargin + $bottomShadow 0;
         padding: 3px 5px;
         border-radius: $keyRadius;
 
         background-image: url("/images/texture.png");
         background-repeat: repeat;
 
+        .key {
+            &.center::after {
+                transform: translateY(28px);
+                width: 36px;
+                margin-left: -5px;
+                text-align: center;
+            }
+
+            &::after, &::before {
+                font-family: Roboto, Helvetica, Arial, sans-serif;
+                font-weight: 500; // Medium
+                color: #FEFDFD;
+
+                position: absolute;
+                content: '';
+            }
+
+            &::after {
+                content: attr(text);
+            }
+
+            &.secondary {
+                &::before, &::after {
+                    font-size: 12px;
+                }
+
+                &::after {
+                    transform: translateY(14px);
+                }
+
+                &::before {
+                    content: attr(secondary);
+                }
+            }
+        }
+
         &:hover {
             &::before {
                 margin: 0;
             }
-        }
-
-        &::after {
-            color: #FEFDFD;
-            content: attr(text);
         }
 
         // Top/above key

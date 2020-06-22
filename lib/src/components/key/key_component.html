@@ -1,10 +1,3 @@
-<div class="key" *ngIf="!spacer">
-<!--    <template [ngIf]="secondaryKey != null">-->
-<!--        {{ secondaryKey }}<br>-->
-<!--    </template>-->
-
-<!--    <template [ngIf]="text != null">-->
-<!--        {{ text }}-->
-<!--    </template>-->
+<div *ngIf="!spacer" class="key" [class.secondary]="secondaryKey != null" [class.center]="center" [attr.text]="text" [attr.secondary]="secondaryKey">
     <icon *ngIf="icon != null" [icon]="icon" width="22px" height="22px"></icon>
 </div>

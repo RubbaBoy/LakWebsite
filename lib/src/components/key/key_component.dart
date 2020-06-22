@@ -20,23 +20,24 @@ class KeyComponent {
 
   /// The text of the key.
   @Input()
-  set text(String value) {
-    root.setAttribute('text', value);
-  }
-
-//  SafeHtml get formattedText => serv.bypassSecurityTrustHtml(text.replaceAll('\\n', '<br>'));
-
-  /// The icon of the key, used if [text] is null.
-  @Input()
-  String icon;
+  String text;
 
   /// If not null, [text] will be placed further down than normal and this will
   /// be places above, for things like numbers and special characters.
   @Input()
   String secondaryKey;
 
+  /// The icon of the key, used if [text] is null.
+  @Input()
+  String icon;
+
   @Input()
   KeySize size = KeySize.Normal;
+
+  /// Centers the text both horizontally and vertically, used for the enter key
+  /// and keypad plus.
+  @Input()
+  bool center = false;
 
   /// The text size in pixels, by default 16px (1rem).
   @Input()
@@ -81,6 +82,13 @@ class KeySize {
   final bool spacer;
 
   const KeySize(this.width, this.height, [this.spacer = false]);
+
+  @override
+  String toString() {
+    return 'KeySize{width: $width, height: $height, spacer: $spacer}';
+  }
 //      width = width + (spacer ? 11 : 0),
 //      height = height + (spacer ? 11 : 0);
+
+
 }

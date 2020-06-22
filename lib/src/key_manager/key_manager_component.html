@@ -34,7 +34,7 @@
         </div>
 
         <div class="keyboard-row">
-            <key text="1" secondaryKey="~"></key>
+            <key text="`" secondaryKey="~"></key>
             <key text="1" secondaryKey="!"></key>
             <key text="2" secondaryKey="@"></key>
             <key text="3" secondaryKey="#"></key>
@@ -90,7 +90,7 @@
             <key text="7"></key>
             <key text="8"></key>
             <key text="9"></key>
-            <key text="+" [size]="KeySize.KeypadTallDouble"></key>
+            <key text="+" [center]="true" [size]="KeySize.KeypadTallDouble"></key>
         </div>
 
         <div class="keyboard-row">
@@ -105,7 +105,7 @@
             <key text="K"></key>
             <key text="L"></key>
             <key text=";" secondaryKey=":"></key>
-            <key text="'" secondaryKey="&quot;"></key>
+            <key text="'" [secondaryKey]="'\"'"></key>
             <key text="Enter" [size]="KeySize.Enter"></key>
 
             <key [size]="KeySize.HalfSpacer"></key>
@@ -142,7 +142,7 @@
             <key text="1"></key>
             <key text="2"></key>
             <key text="3"></key>
-            <key text="E" [size]="KeySize.KeypadTallDouble"></key>
+            <key text="Enter" [textSize]="12" [center]="true" [size]="KeySize.KeypadTallDouble"></key>
         </div>
 
         <div class="keyboard-row">
