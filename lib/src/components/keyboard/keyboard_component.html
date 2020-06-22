@@ -1,6 +1,164 @@
-<div class="container">
-    <h1 class="mb-3">Key Manager</h1>
-    <div class="d-flex flex-wrap">
+<div class="d-flex flex-wrap">
+    <div class="keyboard-row top-spacing">
+        <key text="Esc" [key]="Key.keyEsc" [size]="KeySize.Function"></key>
 
+        <key [size]="KeySize.Spacer"></key>
+
+        <key text="F1" [key]="Key.keyF1" [size]="KeySize.Function"></key>
+        <key text="F2" [key]="Key.keyF2" [size]="KeySize.Function"></key>
+        <key text="F3" [key]="Key.keyF3" [size]="KeySize.Function"></key>
+        <key text="F4" [key]="Key.keyF4" [size]="KeySize.Function"></key>
+
+        <key [size]="KeySize.HalfSpacer"></key>
+
+        <key text="F5" [key]="Key.keyF5" [size]="KeySize.Function"></key>
+        <key text="F6" [key]="Key.keyF6" [size]="KeySize.Function"></key>
+        <key text="F7" [key]="Key.keyF7" [size]="KeySize.Function"></key>
+        <key text="F8" [key]="Key.key8" [size]="KeySize.Function"></key>
+
+        <key [size]="KeySize.HalfSpacer"></key>
+
+        <key text="F9" [key]="Key.keyF9" [size]="KeySize.Function"></key>
+        <key text="F10" [key]="Key.keyF10" [size]="KeySize.Function"></key>
+        <key text="F11" [key]="Key.keyF11" [size]="KeySize.Function"></key>
+        <key text="F12" [key]="Key.keyF12" [size]="KeySize.Function"></key>
+
+        <key [size]="KeySize.HalfSpacer"></key>
+
+        <key text="PrtScr" [key]="Key.keySysrq" [textSize]="10" [size]="KeySize.Function"></key>
+        <key text="Scr" [key]="Key.keyScrolllock" [size]="KeySize.Function"></key>
+        <key text="Ps" [key]="Key.keyPause" [size]="KeySize.Function"></key>
+    </div>
+
+    <div class="keyboard-row">
+        <key text="`" [key]="Key.keyGrave" secondaryKey="~" [shiftKey]="Key.keyGraveShift"></key>
+        <key text="1" [key]="Key.key1" secondaryKey="!" [shiftKey]="Key.key1Shift"></key>
+        <key text="2" [key]="Key.key2" secondaryKey="@" [shiftKey]="Key.key2Shift"></key>
+        <key text="3" [key]="Key.key3" secondaryKey="#" [shiftKey]="Key.key3Shift"></key>
+        <key text="4" [key]="Key.key4" secondaryKey="$" [shiftKey]="Key.key4Shift"></key>
+        <key text="5" [key]="Key.key5" secondaryKey="%" [shiftKey]="Key.key5Shift"></key>
+        <key text="6" [key]="Key.key6" secondaryKey="^" [shiftKey]="Key.key6Shift"></key>
+        <key text="7" [key]="Key.key7" secondaryKey="&" [shiftKey]="Key.key7Shift"></key>
+        <key text="8" [key]="Key.key8" secondaryKey="*" [shiftKey]="Key.key8Shift"></key>
+        <key text="9" [key]="Key.key9" secondaryKey="(" [shiftKey]="Key.key9Shift"></key>
+        <key text="0" [key]="Key.key0" secondaryKey=")" [shiftKey]="Key.key0Shift"></key>
+        <key text="-" [key]="Key.keyMinus" secondaryKey="_" [shiftKey]="Key.keyMinusShift"></key>
+        <key text="=" [key]="Key.keyEqual" secondaryKey="+" [shiftKey]="Key.keyEqualShift"></key>
+        <key text="Back" [key]="Key.keyBackspace" [size]="KeySize.Normal25"></key>
+
+        <key [size]="KeySize.HalfSpacer"></key>
+
+        <key text="Ins" [key]="Key.keyInsert"></key>
+        <key text="Ho" [key]="Key.keyHome"></key>
+        <key text="PU" [key]="Key.keyPageup"></key>
+
+        <key [size]="KeySize.HalfSpacer"></key>
+
+        <key text="NL" [key]="Key.keyNumlock"></key>
+        <key text="/" [key]="Key.keyKpslash"></key>
+        <key text="*" [key]="Key.keyKpasterisk"></key>
+        <key text="-" [key]="Key.keyKpminus"></key>
+    </div>
+
+    <div class="keyboard-row">
+        <key text="Tab" [key]="Key.keyTab" [size]="KeySize.Normal15"></key>
+        <key text="Q" [key]="Key.keyQ" [shiftKey]="Key.keyQShift"></key>
+        <key text="W" [key]="Key.keyW" [shiftKey]="Key.keyWShift"></key>
+        <key text="E" [key]="Key.keyE" [shiftKey]="Key.keyEShift"></key>
+        <key text="R" [key]="Key.keyR" [shiftKey]="Key.keyRShift"></key>
+        <key text="T" [key]="Key.keyT" [shiftKey]="Key.keyTShift"></key>
+        <key text="Y" [key]="Key.keyY" [shiftKey]="Key.keyYShift"></key>
+        <key text="U" [key]="Key.keyU" [shiftKey]="Key.keyUShift"></key>
+        <key text="I" [key]="Key.keyI" [shiftKey]="Key.keyIShift"></key>
+        <key text="O" [key]="Key.keyO" [shiftKey]="Key.keyOShift"></key>
+        <key text="P" [key]="Key.keyP" [shiftKey]="Key.keyPShift"></key>
+        <key text="[" [key]="Key.keyLeftbrace" secondaryKey="{" [shiftKey]="Key.keyLeftbraceShift"></key>
+        <key text="]" [key]="Key.keyRightbrace" secondaryKey="}" [shiftKey]="Key.keyRightbraceShift"></key>
+        <key text="\\" [key]="Key.keyBackslash" secondaryKey="|" [shiftKey]="Key.keyBackslashShift" [size]="KeySize.Normal15"></key>
+
+        <key [size]="KeySize.HalfSpacer"></key>
+
+        <key text="Del" [key]="Key.keyDelete"></key>
+        <key text="En" [key]="Key.keyEnd"></key>
+        <key text="PD" [key]="Key.keyPagedown"></key>
+
+        <key [size]="KeySize.HalfSpacer"></key>
+
+        <key text="7" [key]="Key.keyKp7"></key>
+        <key text="8" [key]="Key.keyKp8"></key>
+        <key text="9" [key]="Key.keyKp9"></key>
+        <key text="+" [key]="Key.keyKpplus" [center]="true" [size]="KeySize.KeypadTallDouble"></key>
+    </div>
+
+    <div class="keyboard-row">
+        <key text="Caps" [key]="Key.keyCapslock" [size]="KeySize.Normal175"></key>
+        <key text="A" [key]="Key.keyA" [shiftKey]="Key.keyAShift"></key>
+        <key text="S" [key]="Key.keyS" [shiftKey]="Key.keySShift"></key>
+        <key text="D" [key]="Key.keyD" [shiftKey]="Key.keyDShift"></key>
+        <key text="F" [key]="Key.keyF" [shiftKey]="Key.keyFShift"></key>
+        <key text="G" [key]="Key.keyG" [shiftKey]="Key.keyGShift"></key>
+        <key text="H" [key]="Key.keyH" [shiftKey]="Key.keyHShift"></key>
+        <key text="J" [key]="Key.keyJ" [shiftKey]="Key.keyJShift"></key>
+        <key text="K" [key]="Key.keyK" [shiftKey]="Key.keyKShift"></key>
+        <key text="L" [key]="Key.keyL" [shiftKey]="Key.keyLShift"></key>
+        <key text=";" [key]="Key.keySemicolon" secondaryKey=":" [shiftKey]="Key.keySemicolonShift"></key>
+        <key text="'" [key]="Key.keyApostrophe" [secondaryKey]="'\"'"></key>
+        <key text="Enter" [key]="Key.keyEnter" [size]="KeySize.Enter"></key>
+
+        <key [size]="KeySize.HalfSpacer"></key>
+        <key [size]="KeySize.Spacer"></key>
+        <key [size]="KeySize.Spacer"></key>
+        <key [size]="KeySize.Spacer"></key>
+        <key [size]="KeySize.HalfSpacer"></key>
+
+        <key text="4" [key]="Key.keyKp4"></key>
+        <key text="5" [key]="Key.keyKp5"></key>
+        <key text="6" [key]="Key.keyKp6"></key>
+    </div>
+
+    <div class="keyboard-row">
+        <key text="Shift" [key]="Key.keyShift" [size]="KeySize.Shift"></key>
+        <key text="Z" [key]="Key.keyZ" [shiftKey]="Key.keyZShift"></key>
+        <key text="X" [key]="Key.keyX" [shiftKey]="Key.keyXShift"></key>
+        <key text="C" [key]="Key.keyC" [shiftKey]="Key.keyCShift"></key>
+        <key text="V" [key]="Key.keyV" [shiftKey]="Key.keyVShift"></key>
+        <key text="B" [key]="Key.keyB" [shiftKey]="Key.keyBShift"></key>
+        <key text="N" [key]="Key.keyN" [shiftKey]="Key.keyNShift"></key>
+        <key text="M" [key]="Key.keyM" [shiftKey]="Key.keyMShift"></key>
+        <key text="," [key]="Key.keyComma" secondaryKey="<" [shiftKey]="Key.keyCommaShift"></key>
+        <key text="." [key]="Key.keyDot" secondaryKey=">" [shiftKey]="Key.keyDotShift"></key>
+        <key text="/" [key]="Key.keySlash" secondaryKey="?" [shiftKey]="Key.keySlashShift"></key>
+        <key text="Shift" [key]="Key.keyShift" [size]="KeySize.Shift"></key>
+
+        <key [size]="KeySize.HalfSpacer"></key>
+        <key [size]="KeySize.Spacer"></key>
+        <key icon="arrow_up" [key]="Key.keyUp"></key>
+        <key [size]="KeySize.Spacer"></key>
+        <key [size]="KeySize.HalfSpacer"></key>
+
+        <key text="1" [key]="Key.keyKp1"></key>
+        <key text="2" [key]="Key.keyKp2"></key>
+        <key text="3" [key]="Key.keyKp3"></key>
+        <key text="Enter" [key]="Key.keyKpenter" [textSize]="12" [center]="true" [size]="KeySize.KeypadTallDouble"></key>
+    </div>
+
+    <div class="keyboard-row">
+        <key text="Crl" [key]="Key.keyLeftctrl" [size]="KeySize.BottomLeft"></key>
+        <key icon="house_fill" [key]="Key.keyLeftmeta" [size]="KeySize.LargeBottom"></key>
+        <key text="Alt" [key]="Key.keyLeftalt" [size]="KeySize.LargeBottom"></key>
+        <key text="Space" [key]="Key.keySpace" [size]="KeySize.Space"></key>
+        <key text="Alt" [key]="Key.keyRightalt" [size]="KeySize.LargeBottom"></key>
+        <key icon="house_fill" [key]="Key.keyRightmeta" [size]="KeySize.LargeBottom"></key>
+        <key icon="layout_text_sidebar_reverse" [size]="KeySize.LargeBottom"></key> <!-- TODO: wtf is this -->
+        <key text="Ctrl" [key]="Key.keyRightctrl" [size]="KeySize.BottomLeft"></key>
+
+        <key [size]="KeySize.HalfSpacer"></key>
+        <key icon="arrow_left" [key]="Key.keyLeft"></key>
+        <key icon="arrow_down" [key]="Key.keyDown"></key>
+        <key icon="arrow_right" [key]="Key.keyRight"></key>
+        <key [size]="KeySize.HalfSpacer"></key>
+
+        <key text="0" [key]="Key.keyKp0" [size]="KeySize.KeypadDouble"></key>
+        <key text="." [key]="Key.keyKpdot"></key>
     </div>
 </div>

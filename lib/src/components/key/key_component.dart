@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:LakWebsite/src/components/icon/icon_component.dart';
+import 'package:LakWebsite/src/services/key/key_enum.dart';
 import 'package:angular/angular.dart';
 import 'package:angular/security.dart';
 
@@ -31,6 +32,15 @@ class KeyComponent {
   @Input()
   String icon;
 
+  /// The [Key] this component represents.
+  @Input()
+  Key key;
+
+  /// The [Key] when shift is pressed this component represents.
+  @Input()
+  Key shiftKey;
+
+  /// The size of the key.
   @Input()
   KeySize size = KeySize.Normal;
 
@@ -53,10 +63,17 @@ class KeyComponent {
   @HostBinding('class.spacer')
   bool get spacer => size.spacer;
 
+  @HostBinding('class.active')
+  bool active = false;
+
   final DomSanitizationService serv;
   final HtmlElement root;
+  Function(KeyComponent component, Key key, String primary, String secondary) onClick;
 
   KeyComponent(this.root, this.serv);
+
+  @HostListener('click', [])
+  void clickAction() => onClick?.call(this, key, text, secondaryKey);
 }
 
 class KeySize {

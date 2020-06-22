@@ -11,7 +11,7 @@ import 'package:angular/security.dart';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 )
-class IconComponent extends OnInit {
+class IconComponent {
   static final icons = <Icon>[
     Icon('plus', contents: '''
     <path fill-rule="evenodd" d="M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z"/>
@@ -59,12 +59,6 @@ class IconComponent extends OnInit {
           .firstWhere((element) => element.icon == icon, orElse: () => null)
           ?.toHTML(ref.classes) ??
       '');
-
-  @override
-  void ngOnInit() {
-    print('rel = $ref');
-    print(ref.classes);
-  }
 }
 
 class Icon {

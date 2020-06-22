@@ -56,7 +56,7 @@ $keyRadius: 3px;
             }
         }
 
-        &:hover {
+        &.active, &:hover {
             &::before {
                 margin: 0;
             }
