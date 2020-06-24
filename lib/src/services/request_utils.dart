@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 
+import 'package:LakWebsite/src/services/cache_service.dart';
+import 'package:LakWebsite/src/services/objects/keys.dart';
 import 'package:angular/angular.dart';
 
 import '../constants.dart';
@@ -9,6 +11,7 @@ import 'objects/sound.dart';
 
 @Injectable()
 class RequestService {
+
   /// Makes a GET request with given headers. Returns JSON.
   Future<RequestResponse> makeRequest(String url,
           {String baseUrl = BASE_URL,
@@ -83,6 +86,19 @@ class RequestService {
         'id': modulationId.id,
         'modulatorData': modulatorData
       }).then((response) => SoundModulation.fromJson(response.validate().json));
+
+  /// Returns a list of Json objects reporesenting [Key]s. Requires a dependency
+  /// on [CacheService] so it is of the responsibility of the using class to
+  /// construct them via [Key.fromJson].
+  Future<List<dynamic>> listKeys() => makeAuthedRequest('/keys/list').then(
+          (response) => List.of(response.json));
+
+  Future<void> updateKey(Key key) =>
+      makeAuthedRequest('/sounds/updateModulator', query: {
+        'key': key.key.linuxCode,
+        'variantId': key.soundVariant.id,
+        'loop': key.loop,
+      });
 }
 
 class RequestResponse {

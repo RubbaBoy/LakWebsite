@@ -14,9 +14,7 @@ import 'package:angular/angular.dart';
     NgFor,
     NgIf,
   ],
-  providers: [
-    ClassProvider(RequestService),
-  ],
+  providers: [],
   pipes: [commonPipes],
 )
 class SoundMixerComponent implements OnInit {

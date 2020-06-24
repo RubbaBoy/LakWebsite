@@ -6,7 +6,6 @@ $keyRadius: 3px;
     cursor: pointer;
 
     display: inline-block;
-    color: #FEFDFD;
 
     &.spacer {
         margin-top: -15px;
@@ -21,6 +20,10 @@ $keyRadius: 3px;
         background-repeat: repeat;
 
         .key {
+            icon {
+                position: absolute;
+            }
+
             &.center::after {
                 transform: translateY(28px);
                 width: 36px;
@@ -80,5 +83,79 @@ $keyRadius: 3px;
 
             transition: margin 200ms;
         }
+
+        &.has-variant::after {
+            content: "";
+            display: block;
+            position: absolute;
+
+            width: 10px;
+            height: 10px;
+
+            border-radius: 50%;
+            background-color: inherit;
+            opacity: 0.9;
+        }
+
+        &::after {
+            margin-top: 19px;
+            margin-left: 16px;
+        }
+
+        &.function::after {
+            margin-top: 13px;
+            margin-left: 16px;
+        }
+
+        &.backspace::after {
+            margin-top: 19px;
+            margin-left: 63px;
+        }
+
+        &.tabSlash::after {
+            margin-top: 19px;
+            margin-left: 39px;
+        }
+
+        &.caps::after {
+            margin-top: 19px;
+            margin-left: 56px;
+        }
+
+        &.enter::after {
+            margin-top: 19px;
+            margin-left: 68px;
+        }
+
+        &.shift::after {
+            margin-top: 19px;
+            margin-left: 85px;
+        }
+
+        &.bottomLeft::after {
+            margin-top: 19px;
+            margin-left: 54px;
+        }
+
+        &.largeBottom::after {
+            margin-top: 19px;
+            margin-left: 24px;
+        }
+
+        &.space::after {
+            margin-top: 19px;
+            margin-left: 224px;
+        }
+
+        &.kpDouble::after {
+            margin-top: 19px;
+            margin-left: 60px;
+        }
+
+        &.kpTallDouble::after {
+            margin-top: 66px;
+            margin-left: 16px;
+        }
+
     }
 }

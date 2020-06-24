@@ -6,6 +6,7 @@ import 'package:angular/security.dart';
 @Component(
   selector: 'icon',
   templateUrl: 'icon_component.html',
+  styleUrls: ['icon_component.css'],
   directives: [
     coreDirectives,
   ],
@@ -55,10 +56,27 @@ class IconComponent {
   @Input()
   String icon;
 
+  /// The color of the icon. May be provided in a straight hex code, minus the #
+  @Input()
+  String color;
+
+  /// If the SVG should be displayed in the DOM. [false] indicates it will be
+  /// displayed with CSS in the host <icon> element.
+  @Input()
+  bool dom = false;
+
+  @HostBinding('class.nondom-icon')
+  bool get nonDom => !dom;
+
+  @HostBinding('style.background-image')
+  String get back => dom ? null : 'url("data:image/svg+xml,${clean(html.toString())}")';
+
   SafeHtml get html => serv.bypassSecurityTrustHtml(icons
           .firstWhere((element) => element.icon == icon, orElse: () => null)
-          ?.toHTML(ref.classes) ??
+          ?.toHTML(classes: ref.classes, fill: '%23$color') ??
       '');
+
+  String clean(String html) => html.replaceAll('"', "\'").replaceAll('\n', '').replaceAll('    ', '');
 }
 
 class Icon {
@@ -80,8 +98,8 @@ class Icon {
     this.contents = '',
   });
 
-  String toHTML([Iterable<String> classes = const []]) => '<svg class="${[
+  String toHTML({Iterable<String> classes = const [], String fill}) => '<svg class="${[
         ...classes,
         ...this.classes
-      ].join(' ')}" width="$width" height="$height" viewBox="$viewBox" fill="$fill" xmlns="http://www.w3.org/2000/svg">$contents</svg>';
+      ].join(' ')}" width="$width" height="$height" viewBox="$viewBox" fill="${fill ?? this.fill}" xmlns="http://www.w3.org/2000/svg">$contents</svg>';
 }

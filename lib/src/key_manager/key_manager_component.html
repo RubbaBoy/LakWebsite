@@ -1,7 +1,25 @@
 <div class="container">
     <h1 class="mb-3">Key Manager</h1>
     <p>
-        Current active key is: {{ active }}
+<!--        Current active key is: {{ active }}-->
     </p>
+
+    <icon icon="plus" class="clickable-icon mx-auto"></icon>
+    <icon icon="plus" class="clickable-icon mx-auto" [dom]="false"></icon>
+
+    <div class="card">
+        <div class="card-body">
+            <h3>Active keys</h3>
+<!--            <p><span *ngFor="let key of activeKeys.keys">{{ activeKeys[key].primary }}</span></p>-->
+
+            <div class="mb-3 row">
+                <p class="col-sm-2">Sound Variant</p>
+<!--                <p class="col-sm-10">{{ displaySoundVariant() }}</p>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
     <keyboard></keyboard>
 </div>

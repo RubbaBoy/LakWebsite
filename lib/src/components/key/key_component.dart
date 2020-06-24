@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:LakWebsite/src/components/icon/icon_component.dart';
+import 'package:LakWebsite/src/services/cache_service.dart';
 import 'package:LakWebsite/src/services/key/key_enum.dart';
 import 'package:angular/angular.dart';
 import 'package:angular/security.dart';
@@ -17,7 +18,9 @@ import 'package:angular/security.dart';
   ],
   providers: [],
 )
-class KeyComponent {
+class KeyComponent extends AfterViewInit {
+
+  static const keyColor = 'FEFDFD';
 
   /// The text of the key.
   @Input()
@@ -32,13 +35,13 @@ class KeyComponent {
   @Input()
   String icon;
 
-  /// The [Key] this component represents.
+  /// The [KeyEnum] this component represents.
   @Input()
-  Key key;
+  KeyEnum key;
 
-  /// The [Key] when shift is pressed this component represents.
+  /// The [KeyEnum] when shift is pressed this component represents.
   @Input()
-  Key shiftKey;
+  KeyEnum shiftKey;
 
   /// The size of the key.
   @Input()
@@ -66,39 +69,62 @@ class KeyComponent {
   @HostBinding('class.active')
   bool active = false;
 
+  @HostBinding('style.color')
+  String get color => keyColor;
+
+  @HostBinding('style.background-color')
+  String variantColor;
+
+  final CacheService cacheService;
   final DomSanitizationService serv;
   final HtmlElement root;
-  Function(KeyComponent component, Key key, String primary, String secondary) onClick;
+  Function(KeyComponent component, KeyEnum key, String primary, String secondary) onClick;
 
-  KeyComponent(this.root, this.serv);
+  KeyComponent(this.cacheService, this.root, this.serv);
 
   @HostListener('click', [])
   void clickAction() => onClick?.call(this, key, text, secondaryKey);
+
+  @override
+  void ngAfterViewInit() {
+    if (size.domClass != null) {
+      root.classes.add(size.domClass);
+    }
+
+    var key = cacheService.getKey(this.key);
+    var variant = key?.soundVariant;
+    if (variant != null) {
+      root.classes.add('has-variant');
+      print(variant.color);
+      variantColor = '#${variant.color}';
+    }
+  }
 }
 
 class KeySize {
   // Normal width is 35 (changeable) + 11 (shadow)
-  static const Normal = KeySize(35, 35);
-  static const Function = KeySize(35, 28);
-  static const Normal25 = KeySize(81, 35); // USed for backspace (35 * 2.5) - 6
-  static const Normal15 = KeySize(58, 35); // Used for tab (35 * 1.5) - 6
-  static const Normal175 = KeySize(75, 35); // Used for caps lock (35 /2) + 58
-  static const Enter = KeySize(87, 35); // Used for enter (35 /2) + 81 - 11
-  static const Shift = KeySize(104, 35); // Used for shift
-  static const BottomLeft = KeySize(73, 35); // Used for ctrl
-  static const LargeBottom = KeySize(43, 35); // Used for ctrl
-  static const Space = KeySize(243, 35); // Used for shift
-  static const KeypadDouble = KeySize(79, 35); // Used for keypad enter
-  static const KeypadTallDouble = KeySize(35, 82); // Used for keypad enter
+  static const Normal = KeySize(35, 35, null);
+  static const Function = KeySize(35, 28, 'function');
+  static const Backspace = KeySize(81, 35, 'backspace'); // USed for backspace (35 * 2.5) - 6
+  static const TabSlash = KeySize(58, 35, 'tabSlash'); // Used for tab and / (35 * 1.5) - 6
+  static const Caps = KeySize(75, 35, 'caps'); // Used for caps lock (35 /2) + 58
+  static const Enter = KeySize(87, 35, 'enter'); // Used for enter (35 /2) + 81 - 11
+  static const Shift = KeySize(104, 35, 'shift'); // Used for shift
+  static const BottomLeft = KeySize(73, 35, 'bottomLeft'); // Used for ctrl
+  static const LargeBottom = KeySize(43, 35, 'largeBottom'); // Used for windows key
+  static const Space = KeySize(243, 35, 'space'); // Used for shift
+  static const KeypadDouble = KeySize(79, 35, 'kpDouble'); // Used for keypad enter
+  static const KeypadTallDouble = KeySize(35, 82, 'kpTallDouble'); // Used for keypad enter
 
-  static const Spacer = KeySize(35 + 11, 35, true);
-  static const HalfSpacer = KeySize(23, 35, true); // (35 + 11) / 2
+  static const Spacer = KeySize(35 + 11, 35, null, true);
+  static const HalfSpacer = KeySize(23, 35, null, true); // (35 + 11) / 2
 
   final int width;
   final int height;
+  final String domClass;
   final bool spacer;
 
-  const KeySize(this.width, this.height, [this.spacer = false]);
+  const KeySize(this.width, this.height, this.domClass, [this.spacer = false]);
 
   @override
   String toString() {

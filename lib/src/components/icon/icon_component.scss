@@ -1,0 +1,15 @@
+:host.nondom-icon {
+    background-size: 0 0;
+
+    &::before {
+        content: "";
+        display: inline-block;
+
+        background-image: inherit;
+        background-repeat: no-repeat;
+        background-size: 1rem 1rem;
+
+        width: 1rem;
+        height: 1rem;
+    }
+}
