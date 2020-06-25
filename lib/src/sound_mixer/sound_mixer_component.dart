@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:LakWebsite/src/components/icon/icon_component.dart';
 import 'package:LakWebsite/src/components/modal/modal_component.dart';
 import 'package:LakWebsite/src/components/modulators/modulator.dart';
+import 'package:LakWebsite/src/components/modulators/pitch_component/pitch_component.dart';
 import 'package:LakWebsite/src/components/modulators/volume_component/volume_component.dart';
 import 'package:LakWebsite/src/services/cache_service.dart';
 import 'package:LakWebsite/src/services/objects/sound.dart';
@@ -15,6 +16,7 @@ import 'package:angular/angular.dart';
   templateUrl: 'sound_mixer_component.html',
   directives: [
     VolumeComponent,
+    PitchComponent,
     LakModalComponent,
     IconComponent,
     NgFor,
@@ -42,7 +44,10 @@ class SoundMixerComponent implements OnInit, AfterChanges {
   @ViewChild(VolumeComponent)
   VolumeComponent volumeComponent;
 
-  List<Modulator> get modulators => [volumeComponent];
+  @ViewChild(PitchComponent)
+  PitchComponent pitchComponent;
+
+  List<Modulator> get modulators => [volumeComponent, pitchComponent];
 
   Sound activeSound;
   SoundVariant activeVariant;

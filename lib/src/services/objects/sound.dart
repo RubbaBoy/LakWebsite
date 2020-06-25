@@ -5,10 +5,10 @@ final uuidMaker = Uuid();
 
 class ModulationId {
 
-  static final VOLUME = ModulationId(0);
-  static final PITCH = ModulationId(1);
+  static final volume = ModulationId(0);
+  static final pitch = ModulationId(1);
 
-  static final values = <ModulationId>[VOLUME, PITCH];
+  static final values = <ModulationId>[volume, pitch];
 
   final int id;
 

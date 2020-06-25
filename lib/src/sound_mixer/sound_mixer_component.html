@@ -32,18 +32,19 @@
         <div class="col-12 col-lg-8 pl-lg-4 mt-4 mt-lg-0">
             <div class="card">
                 <div class="card-body">
-<!--                    <template [ngIf]="active">-->
-                        Inspecting sound {{ activeSound?.id }}<br>
-                        Its path: {{ activeSound?.uri }}<br>
-                        Variant ID: {{ activeVariant?.id }}<br>
-                        Variant Desc: {{ activeVariant?.description }}<br>
+                    Inspecting sound {{ activeSound?.id }}<br>
+                    Its path: {{ activeSound?.uri }}<br>
+                    Variant ID: {{ activeVariant?.id }}<br>
+                    Variant Desc: {{ activeVariant?.description }}<br>
 
-                        <volume-modulator [enabled]="active"></volume-modulator>
+                    <volume-modulator [enabled]="active"></volume-modulator>
+                    <pitch-modulator [enabled]="active"></pitch-modulator>
 
-                        <div class="mt-2">
-                            <button type="button" class="btn btn-primary col-auto" (click)="save()" [disabled]="!active">Save</button>
-                        </div>
-<!--                    </template>-->
+                    <div class="mt-2">
+                        <button type="button" class="btn btn-primary col-auto" (click)="save()" [disabled]="!active">
+                            Save
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
 <h3>Volume Control</h3>
-<label for="volumeRange" class="form-label">Volume {{ enabled ? value : '-' }}%</label>
+<label for="volumeRange" class="form-label">Volume {{ enabled ? value.toString() + '%' : '-' }}</label>
 <div class="row d-flex justify-content-between">
     <div class="col-auto">
         <span class="form-text">0</span>

@@ -8,30 +8,30 @@ import 'package:LakWebsite/src/services/request_utils.dart';
 import 'package:angular/angular.dart';
 
 @Component(
-  selector: 'volume-modulator',
-  templateUrl: 'volume_component.html',
-  styleUrls: ['volume_component.css'],
+  selector: 'pitch-modulator',
+  templateUrl: 'pitch_component.html',
+  styleUrls: ['pitch_component.css'],
   directives: [
     coreDirectives,
   ],
 )
-class VolumeComponent extends Modulator {
+class PitchComponent extends Modulator {
 
-  @ViewChild('volumeRange')
-  InputElement volumeRange;
+  @ViewChild('pitchRange')
+  InputElement pitchRange;
 
   double value = 0;
 
-  VolumeComponent(HtmlElement root, RequestService requestService) :
-      super(root, requestService, ModulationId.volume, {'volume': 100});
+  PitchComponent(HtmlElement root, RequestService requestService) :
+      super(root, requestService, ModulationId.pitch, {'pitch': 1});
 
-  void onChange() => value = volumeRange.valueAsNumber.toDouble();
+  void onChange() => value = pitchRange.valueAsNumber.toDouble();
 
   @override
   void bind(Map<String, dynamic> modulationData) =>
-      value = modulationData['volume'];
+      value = modulationData['pitch'];
 
   @override
   Map<String, dynamic> saveData(_) =>
-      {'volume': value};
+      {'pitch': value};
 }
