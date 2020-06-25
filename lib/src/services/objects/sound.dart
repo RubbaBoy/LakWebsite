@@ -42,19 +42,19 @@ class Sound {
 }
 
 class SoundModulation {
-  final int id;
+  final ModulationId id;
   final String variant;
-  final Map<String, dynamic> value;
+  Map<String, dynamic> value;
 
   SoundModulation(this.id, this.variant, this.value);
 
   SoundModulation.fromJson(Map<String, dynamic> json) :
-      id = json['id'],
+      id = ModulationId.fromId(json['id']),
       variant = json['variant'],
       value = json['value'];
 
   Map<String, dynamic> toJson() => {
-    'id': id,
+    'id': id.id,
     'variant': variant,
     'value': value,
   };

@@ -6,30 +6,34 @@ import 'package:LakWebsite/src/services/cache_service.dart';
 import 'package:LakWebsite/src/services/objects/keys.dart';
 import 'package:angular/angular.dart';
 
-import '../constants.dart';
+import '../utility/constants.dart';
 import 'objects/sound.dart';
 
 @Injectable()
 class RequestService {
-
   /// Makes a GET request with given headers. Returns JSON.
   Future<RequestResponse> makeRequest(String url,
-          {String baseUrl = BASE_URL,
+          {String method = 'GET',
+          String baseUrl = BASE_URL,
           Map<String, String> query,
+          dynamic body,
           Map<String, String> requestHeaders,
           void onProgress(ProgressEvent e)}) =>
       HttpRequest.request('$baseUrl$url${joinQuery(query)}',
-              method: 'GET',
+              method: method,
               requestHeaders: requestHeaders,
+              sendData: body == null ? null : jsonEncode(body),
               onProgress: onProgress)
           .then((HttpRequest xhr) =>
               RequestResponse(xhr.status, jsonDecode(xhr.responseText)));
 
   Future<RequestResponse> makeAuthedRequest(String url,
-          {String baseUrl = BASE_URL,
+          {String method = 'GET',
+          String baseUrl = BASE_URL,
           Map<String, dynamic> query = const {},
           Map<String, String> requestHeaders = const {}}) async =>
       makeRequest(url,
+          method: method,
           baseUrl: baseUrl,
           query: query
               .map((k, v) => MapEntry(k, Uri.encodeComponent('${v ?? ''}'))),
@@ -38,9 +42,28 @@ class RequestService {
 //            ...{'Authorization': authService.accessToken}
           });
 
-  String joinQuery(Map<String, dynamic> query) =>
-      (query.isNotEmpty ? '?' : '') +
+  Future<RequestResponse> makeAuthedPostRequest(String url,
+          {String baseUrl = BASE_URL,
+          Map<String, dynamic> body = const {},
+          Map<String, String> requestHeaders = const {}}) async =>
+      makeRequest(url,
+          method: 'POST',
+          baseUrl: baseUrl,
+          body: body,
+          requestHeaders: {
+            ...{'Content-Type': 'application/json'},
+            ...requestHeaders,
+//            ...{'Authorization': authService.accessToken}
+          });
+
+  String joinQuery(Map<String, dynamic> query) {
+    if (query == null) {
+      return '';
+    }
+
+    return (query.isNotEmpty ? '?' : '') +
       query.entries.map((entry) => '${entry.key}=${entry.value}').join('&');
+  }
 
   Future<List<Sound>> listSounds() => makeAuthedRequest('/sounds/list').then(
       (response) => List.of(response.json)
@@ -54,17 +77,17 @@ class RequestService {
               .toList());
 
   Future<void> addSound(String uri) =>
-      makeAuthedRequest('/sounds/addSound', query: {'uri': uri});
+      makeAuthedPostRequest('/sounds/addSound', body: {'uri': uri});
 
   Future<SoundVariant> addVariant(String name, String soundId) =>
-      makeAuthedRequest('/sounds/addVariant',
-              query: {'name': name, 'soundId': soundId})
-          .then((response) => response.validate().json);
+      makeAuthedPostRequest('/sounds/addVariant',
+          body: {'name': name, 'soundId': soundId})
+          .then((response) => SoundVariant.fromJson(response.validate().json));
 
   // TODO: See if I can just do {"id": id, "soundId": soundId...}
   Future<void> updateVariant(String id,
           {String soundId, String description, String color}) =>
-      makeAuthedRequest('/sounds/updateVariant', query: {
+      makeAuthedPostRequest('/sounds/updateVariant', body: {
         'id': id,
         if (soundId != null) ...{'soundId': soundId},
         if (description != null) ...{'description': description},
@@ -72,16 +95,16 @@ class RequestService {
       });
 
   Future<void> addModulator(String variantId, ModulationId modulationId) =>
-      makeAuthedRequest('/sounds/addModulator',
-          query: {'variantId': variantId, 'id': modulationId.id});
+      makeAuthedPostRequest('/sounds/addModulator',
+          body: {'variantId': variantId, 'id': modulationId.id});
 
   Future<void> removeModulator(String variantId, ModulationId modulationId) =>
-      makeAuthedRequest('/sounds/removeModulator',
-          query: {'variantId': variantId, 'id': modulationId.id});
+      makeAuthedPostRequest('/sounds/removeModulator',
+          body: {'variantId': variantId, 'id': modulationId.id});
 
   Future<SoundModulation> updateModulator(String variantId,
           ModulationId modulationId, Map<String, dynamic> modulatorData) =>
-      makeAuthedRequest('/sounds/updateModulator', query: {
+      makeAuthedPostRequest('/sounds/updateModulator', body: {
         'variantId': variantId,
         'id': modulationId.id,
         'modulatorData': modulatorData
@@ -90,11 +113,11 @@ class RequestService {
   /// Returns a list of Json objects reporesenting [Key]s. Requires a dependency
   /// on [CacheService] so it is of the responsibility of the using class to
   /// construct them via [Key.fromJson].
-  Future<List<dynamic>> listKeys() => makeAuthedRequest('/keys/list').then(
-          (response) => List.of(response.json));
+  Future<List<dynamic>> listKeys() => makeAuthedRequest('/keys/list')
+      .then((response) => List.of(response.json));
 
   Future<void> updateKey(Key key) =>
-      makeAuthedRequest('/sounds/updateModulator', query: {
+      makeAuthedPostRequest('/sounds/updateModulator', body: {
         'key': key.key.linuxCode,
         'variantId': key.soundVariant.id,
         'loop': key.loop,

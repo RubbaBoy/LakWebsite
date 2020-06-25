@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:LakWebsite/src/components/icon/icon_component.dart';
 import 'package:LakWebsite/src/components/modal/modal_component.dart';
+import 'package:LakWebsite/src/components/modulators/modulator.dart';
+import 'package:LakWebsite/src/components/modulators/volume_component/volume_component.dart';
+import 'package:LakWebsite/src/services/cache_service.dart';
 import 'package:LakWebsite/src/services/objects/sound.dart';
 import 'package:LakWebsite/src/services/request_utils.dart';
 import 'package:angular/angular.dart';
@@ -9,6 +14,7 @@ import 'package:angular/angular.dart';
   styleUrls: ['sound_mixer_component.css'],
   templateUrl: 'sound_mixer_component.html',
   directives: [
+    VolumeComponent,
     LakModalComponent,
     IconComponent,
     NgFor,
@@ -17,16 +23,26 @@ import 'package:angular/angular.dart';
   providers: [],
   pipes: [commonPipes],
 )
-class SoundMixerComponent implements OnInit {
+class SoundMixerComponent implements OnInit, AfterChanges {
+  final ChangeDetectorRef ref;
+  final CacheService cacheService;
   final RequestService requestService;
 
-  SoundMixerComponent(this.requestService);
+  SoundMixerComponent(this.ref, this.cacheService, this.requestService);
+
+  @Output()
+  bool get active => activeVariant != null;
 
   @ViewChild('addSoundModal', read: LakModalComponent)
   LakModalComponent addSoundModal;
 
   @ViewChild('addVariantModal', read: LakModalComponent)
   LakModalComponent addVariantModal;
+
+  @ViewChild(VolumeComponent)
+  VolumeComponent volumeComponent;
+
+  List<Modulator> get modulators => [volumeComponent];
 
   Sound activeSound;
   SoundVariant activeVariant;
@@ -37,8 +53,10 @@ class SoundMixerComponent implements OnInit {
 
   @override
   void ngOnInit() {
-    print('Sound Mixer Init');
+    reloadSounds();
+  }
 
+  void reloadSounds() {
     requestService.listSounds().then((value) => sounds = value);
     requestService.listSoundVariants().then((value) => _allVariants = value);
   }
@@ -53,12 +71,36 @@ class SoundMixerComponent implements OnInit {
       displayingVariants = _allVariants
           .where((element) => element.sound == sound)
           .toList(growable: false);
-      activeVariant = displayingVariants.first;
+
+      clickVariant(displayingVariants.first);
     }
   }
 
-  void clickVariant(SoundVariant soundVariant) =>
-      activeVariant = activeVariant == soundVariant ? null : soundVariant;
+  void clickVariant(SoundVariant soundVariant) {
+    if (soundVariant == null) {
+      return;
+    }
+
+    if (activeVariant == soundVariant) {
+      activeVariant = null;
+    } else {
+      activeVariant = soundVariant;
+      bindToVariant(soundVariant);
+    }
+  }
+
+  void bindToVariant(SoundVariant variant) {
+    for (var modulator in modulators) {
+      modulator.bindToVariant(variant);
+    }
+  }
+
+  void save() {
+    print('Saving modulation data!');
+    for (var modulator in modulators) {
+      modulator.save();
+    }
+  }
 
   void addSound() {
     print('Adding sound!');
@@ -68,13 +110,13 @@ class SoundMixerComponent implements OnInit {
         onConfirm: (data) {
           print('Confirming in here');
           print('data = $data');
+          requestService.addSound(data['path']).then((_) => reloadSounds());
         },
         onCancel: () {
           print('Cancelling in here');
         },
         elementCallback: {
-          '#nameInput': LakModalComponent.inputValue,
-          '#pathInput': LakModalComponent.inputValue,
+          'path': LakModalComponent.inputValue,
         });
   }
 
@@ -86,13 +128,20 @@ class SoundMixerComponent implements OnInit {
         onConfirm: (data) {
           print('Confirming in here');
           print('data = $data');
+          requestService
+              .addVariant(data['name'], activeSound.id)
+              .then((_) => reloadSounds());
         },
         onCancel: () {
           print('Cancelling in here');
         },
         elementCallback: {
-          '#nameInput': LakModalComponent.inputValue,
-          '#pathInput': LakModalComponent.inputValue,
+          'name': LakModalComponent.inputValue,
         });
+  }
+
+  @override
+  void ngAfterChanges() {
+    print('Changed $modulators');
   }
 }

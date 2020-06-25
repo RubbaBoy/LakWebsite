@@ -32,10 +32,18 @@
         <div class="col-12 col-lg-8 pl-lg-4 mt-4 mt-lg-0">
             <div class="card">
                 <div class="card-body">
-                    Inspecting sound {{ activeSound?.id }}<br>
-                    Its path: {{ activeSound?.uri }}<br>
-                    Variant ID: {{ activeVariant?.id }}<br>
-                    Variant Desc: {{ activeVariant?.description }}<br>
+<!--                    <template [ngIf]="active">-->
+                        Inspecting sound {{ activeSound?.id }}<br>
+                        Its path: {{ activeSound?.uri }}<br>
+                        Variant ID: {{ activeVariant?.id }}<br>
+                        Variant Desc: {{ activeVariant?.description }}<br>
+
+                        <volume-modulator [enabled]="active"></volume-modulator>
+
+                        <div class="mt-2">
+                            <button type="button" class="btn btn-primary col-auto" (click)="save()" [disabled]="!active">Save</button>
+                        </div>
+<!--                    </template>-->
                 </div>
             </div>
         </div>
@@ -48,9 +56,9 @@
     </p>
 
     <div class="row">
-        <label for="soundPathInput" class="col-3 col-form-label">Local Sound Path</label>
+        <label class="col-3 col-form-label">Local Sound Path</label>
         <div class="col-9">
-            <input class="form-control mb-3" id="soundPathInput" placeholder="Path">
+            <input class="path form-control mb-3" placeholder="Path">
         </div>
     </div>
 
@@ -66,16 +74,9 @@
     </p>
 
     <div class="row">
-        <label for="variantNameInput" class="col-3 col-form-label">Variant Name</label>
+        <label class="col-3 col-form-label">Variant Name</label>
         <div class="col-9">
-            <input class="form-control mb-3" id="variantNameInput" placeholder="Name">
-        </div>
-    </div>
-
-    <div class="row">
-        <label for="variantPathInput" class="col-3 col-form-label">Variant Path</label>
-        <div class="col-9">
-            <input class="form-control mb-3" id="variantPathInput" placeholder="Path">
+            <input class="name form-control mb-3" placeholder="Name">
         </div>
     </div>
 

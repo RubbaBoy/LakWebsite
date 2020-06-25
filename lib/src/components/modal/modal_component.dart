@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 
+import 'package:LakWebsite/src/utility/utility.dart';
 import 'package:angular/angular.dart';
 
 @Component(
@@ -14,12 +15,14 @@ import 'package:angular/angular.dart';
   changeDetection: ChangeDetectionStrategy.OnPush,
 )
 class LakModalComponent {
+  final HtmlElement root;
   final ChangeDetectorRef changeRef;
 
   @Input()
   String title;
 
   bool block = false;
+  bool _inittedLabels = false;
 
   Map<String, dynamic> content = {};
   Function(Map<String, dynamic>) onConfirm;
@@ -35,7 +38,7 @@ class LakModalComponent {
 
   bool get show => _show;
 
-  LakModalComponent(this.changeRef);
+  LakModalComponent(this.root, this.changeRef);
 
   void cancel() {
     _hideStuff();
@@ -45,7 +48,8 @@ class LakModalComponent {
   void confirm() {
     _hideStuff();
 
-    onConfirm?.call(elementCallback.map((selector, callback) => MapEntry(selector, callback(querySelector(selector))))
+    onConfirm?.call(elementCallback.map((selector, callback) =>
+        MapEntry(selector, callback(root.querySelector('.$selector'))))
       ..removeWhere((key, value) => value == null));
   }
 
@@ -62,11 +66,16 @@ class LakModalComponent {
     animationDelay(() => show = true, 10);
   }
 
-  void openPrompt({Map<String, dynamic> content = const {}, Map<String, Function> elementCallback, Function(Map<String, dynamic>) onConfirm, Function() onCancel}) {
+  void openPrompt(
+      {Map<String, dynamic> content = const {},
+      Map<String, Function> elementCallback,
+      Function(Map<String, dynamic>) onConfirm,
+      Function() onCancel}) {
     this.content = content;
     this.onConfirm = onConfirm;
     this.onCancel = onCancel;
     this.elementCallback = elementCallback;
+    _initLabels();
     _showStuff();
   }
 
@@ -81,4 +90,33 @@ class LakModalComponent {
 
   @override
   operator [](key) => content[key];
+
+  @ViewChildren('.row')
+  set rows(List<HtmlElement> rows) {
+    print('rows = ${rows.length}');
+  }
+
+  void _initLabels() {
+    if (_inittedLabels) {
+      return;
+    }
+
+    _inittedLabels = true;
+
+    for (var row in querySelectorAll('.row')) {
+      var input = row.querySelector('input');
+      var label = row.querySelector('label');
+
+      print('${input.id} and ${label.id}');
+
+      if ((input == null || label == null) ||
+          (input.id != '' || input.id != '')) {
+        continue;
+      }
+
+      var id = uuid.v4();
+      input.id = id;
+      label.setAttribute('for', id);
+    }
+  }
 }
