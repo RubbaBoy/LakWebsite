@@ -1,6 +1,7 @@
-import 'dart:async';
+import 'dart:html';
 
 import 'package:LakWebsite/src/components/icon/icon_component.dart';
+import 'package:LakWebsite/src/components/input/color_component/color_component.dart';
 import 'package:LakWebsite/src/components/modal/modal_component.dart';
 import 'package:LakWebsite/src/components/modulators/modulator.dart';
 import 'package:LakWebsite/src/components/modulators/pitch_component/pitch_component.dart';
@@ -15,6 +16,7 @@ import 'package:angular/angular.dart';
   styleUrls: ['sound_mixer_component.css'],
   templateUrl: 'sound_mixer_component.html',
   directives: [
+    ColorComponent,
     VolumeComponent,
     PitchComponent,
     LakModalComponent,
@@ -25,7 +27,7 @@ import 'package:angular/angular.dart';
   providers: [],
   pipes: [commonPipes],
 )
-class SoundMixerComponent implements OnInit, AfterChanges {
+class SoundMixerComponent implements OnInit {
   final ChangeDetectorRef ref;
   final CacheService cacheService;
   final RequestService requestService;
@@ -40,6 +42,12 @@ class SoundMixerComponent implements OnInit, AfterChanges {
 
   @ViewChild('addVariantModal', read: LakModalComponent)
   LakModalComponent addVariantModal;
+
+  @ViewChild('nameInput')
+  InputElement nameInput;
+
+  @ViewChild(ColorComponent)
+  ColorComponent colorComponent;
 
   @ViewChild(VolumeComponent)
   VolumeComponent volumeComponent;
@@ -90,31 +98,34 @@ class SoundMixerComponent implements OnInit, AfterChanges {
       activeVariant = null;
     } else {
       activeVariant = soundVariant;
-      bindToVariant(soundVariant);
+      bindToActive();
     }
   }
 
-  void bindToVariant(SoundVariant variant) {
+  void bindToActive() {
+    colorComponent.value = activeVariant.color;
+
     for (var modulator in modulators) {
-      modulator.bindToVariant(variant);
+      modulator.bindToVariant(activeVariant);
     }
   }
 
   void save() {
-    print('Saving modulation data!');
+    activeVariant
+      ..description = nameInput.value
+      ..color = colorComponent.value;
+
+    requestService.updateVariant(activeVariant.id,
+        color: activeVariant.alphaColor, description: activeVariant.description);
+
     for (var modulator in modulators) {
       modulator.save();
     }
   }
 
   void addSound() {
-    print('Adding sound!');
-
-    print('addModal = $addSoundModal');
     addSoundModal.openPrompt(
         onConfirm: (data) {
-          print('Confirming in here');
-          print('data = $data');
           requestService.addSound(data['path']).then((_) => reloadSounds());
         },
         onCancel: () {
@@ -126,13 +137,9 @@ class SoundMixerComponent implements OnInit, AfterChanges {
   }
 
   void addVariant() {
-    print('Adding sound variant');
-
     addVariantModal.openPrompt(
         content: {'sound': activeSound},
         onConfirm: (data) {
-          print('Confirming in here');
-          print('data = $data');
           requestService
               .addVariant(data['name'], activeSound.id)
               .then((_) => reloadSounds());
@@ -143,10 +150,5 @@ class SoundMixerComponent implements OnInit, AfterChanges {
         elementCallback: {
           'name': LakModalComponent.inputValue,
         });
-  }
-
-  @override
-  void ngAfterChanges() {
-    print('Changed $modulators');
   }
 }

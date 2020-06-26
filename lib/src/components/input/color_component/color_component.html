@@ -1,0 +1,3 @@
+<label for="colorInput" class="color-label" [style.border-bottom-color]="value" [class.text-muted]="!enabled">Display Color</label>
+<input #colorInput type="color" id="colorInput" [value]="value" (change)="onChange()" (input)="onChange()" [disabled]="!enabled">
+<!--<div class="color-preview d-inline-block" [style.background]="value"></div>-->

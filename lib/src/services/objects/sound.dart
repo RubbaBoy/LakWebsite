@@ -1,10 +1,8 @@
-
 import 'package:uuid/uuid.dart';
 
 final uuidMaker = Uuid();
 
 class ModulationId {
-
   static final volume = ModulationId(0);
   static final pitch = ModulationId(1);
 
@@ -14,7 +12,8 @@ class ModulationId {
 
   const ModulationId(this.id);
 
-  factory ModulationId.fromId(int id) => values.firstWhere((modulationId) => modulationId.id == id, orElse: () => null);
+  factory ModulationId.fromId(int id) => values
+      .firstWhere((modulationId) => modulationId.id == id, orElse: () => null);
 }
 
 class Sound {
@@ -23,14 +22,14 @@ class Sound {
 
   Sound(this.id, this.uri);
 
-  Sound.fromJson(Map<String, dynamic> json) :
-      id = json['id'],
-      uri = Uri.parse(json['uri']);
+  Sound.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        uri = Uri.parse(json['uri']);
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'uri': uri,
-  };
+        'id': id,
+        'uri': uri,
+      };
 
   @override
   bool operator ==(Object other) =>
@@ -48,16 +47,16 @@ class SoundModulation {
 
   SoundModulation(this.id, this.variant, this.value);
 
-  SoundModulation.fromJson(Map<String, dynamic> json) :
-      id = ModulationId.fromId(json['id']),
-      variant = json['variant'],
-      value = json['value'];
+  SoundModulation.fromJson(Map<String, dynamic> json)
+      : id = ModulationId.fromId(json['id']),
+        variant = json['variant'],
+        value = json['value'];
 
   Map<String, dynamic> toJson() => {
-    'id': id.id,
-    'variant': variant,
-    'value': value,
-  };
+        'id': id.id,
+        'variant': variant,
+        'value': value,
+      };
 }
 
 class SoundVariant {
@@ -67,23 +66,30 @@ class SoundVariant {
   String color;
   List<SoundModulation> modulators;
 
+  /// Turns `#AABBCC` into `00AABBCC`, which is what the API requires.
+  String get alphaColor => color == null ? null : '00${color.substring(1)}';
+
   SoundVariant(
       this.id, this.sound, this.description, this.color, this.modulators);
 
-  SoundVariant.fromJson(Map<String, dynamic> json) :
-      id = json['id'],
-      sound = Sound.fromJson(json['sound']),
-      description = json['description'],
-      color = json['color'],
-      modulators = List.from(json['modulators']).map((j) => SoundModulation.fromJson(j)).toList();
+  SoundVariant.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        sound = Sound.fromJson(json['sound']),
+        description = json['description'],
+        color = '#${json['color'].substring(2)}',
+        // Turn `00AABBCC` into `#AABBCC`
+        modulators = List.from(json['modulators'])
+            .map((j) => SoundModulation.fromJson(j))
+            .toList();
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'sound': sound.toJson(),
-    'description': description,
-    'color': color,
-    'modulators': modulators.map((modulator) => modulator.toJson()).toList(),
-  };
+        'id': id,
+        'sound': sound.toJson(),
+        'description': description,
+        'color': alphaColor,
+        'modulators':
+            modulators.map((modulator) => modulator.toJson()).toList(),
+      };
 
   @override
   bool operator ==(Object other) =>
