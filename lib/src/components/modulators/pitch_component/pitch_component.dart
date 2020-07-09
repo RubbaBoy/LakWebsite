@@ -5,6 +5,7 @@ import 'package:LakWebsite/src/components/modulators/modulator.dart';
 import 'package:LakWebsite/src/services/cache_service.dart';
 import 'package:LakWebsite/src/services/objects/sound.dart';
 import 'package:LakWebsite/src/services/request_utils.dart';
+import 'package:LakWebsite/src/utility/utility.dart';
 import 'package:angular/angular.dart';
 
 @Component(
@@ -22,8 +23,10 @@ class PitchComponent extends Modulator {
 
   double value = 0;
 
+  String get displayValue => mapRange(value, -1, 1, -20, 20).toStringAsFixed(1);
+
   PitchComponent(HtmlElement root, RequestService requestService) :
-      super(root, requestService, ModulationId.pitch, {'pitch': 1});
+      super(root, requestService, ModulationId.pitch, {'pitch': 0});
 
   void onChange() => value = pitchRange.valueAsNumber.toDouble();
 

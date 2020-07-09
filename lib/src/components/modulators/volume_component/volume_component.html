@@ -1,13 +1,13 @@
 <h3>Volume Control</h3>
-<label for="volumeRange" class="form-label">Volume {{ enabled ? value.toString() + '%' : '-' }}</label>
+<label for="volumeRange" class="form-label">Volume {{ enabled ? displayValue + '%' : '-' }}</label>
 <div class="row d-flex justify-content-between">
     <div class="col-auto">
-        <span class="form-text">0</span>
+        <span class="form-text">0%</span>
     </div>
     <div class="col-10">
-        <input #volumeRange type="range" class="form-range" min="0" max="200" step="1" id="volumeRange" [value]="value" (change)="onChange()" (input)="onChange()" [disabled]="!enabled">
+        <input #volumeRange type="range" class="form-range" min="0" max="1" step="0.001" id="volumeRange" [value]="value" (change)="onChange()" (input)="onChange()" [disabled]="!enabled">
     </div>
     <div class="col-auto">
-        <span class="form-text">200</span>
+        <span class="form-text">100%</span>
     </div>
 </div>

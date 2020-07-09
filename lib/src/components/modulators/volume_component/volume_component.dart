@@ -22,6 +22,8 @@ class VolumeComponent extends Modulator {
 
   double value = 0;
 
+  String get displayValue => (value * 100).toStringAsFixed(1);
+
   VolumeComponent(HtmlElement root, RequestService requestService) :
       super(root, requestService, ModulationId.volume, {'volume': 100});
 

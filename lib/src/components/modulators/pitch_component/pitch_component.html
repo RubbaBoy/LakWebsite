@@ -1,13 +1,13 @@
 <h3>Pitch Control</h3>
-<label for="pitchRange" class="form-label">Pitch {{ enabled ? value : '-' }}</label>
+<label for="pitchRange" class="form-label">Pitch {{ enabled ? displayValue + 'x' : '-' }}</label>
 <div class="row d-flex justify-content-between">
     <div class="col-auto">
-        <span class="form-text">0.5</span>
+        <span class="form-text">-20x</span>
     </div>
     <div class="col-10">
-        <input #pitchRange type="range" class="form-range" min="0.5" max="2" step="0.01" id="pitchRange" [value]="value" (change)="onChange()" (input)="onChange()" [disabled]="!enabled">
+        <input #pitchRange type="range" class="form-range" min="-1" max="1" step="0.001" id="pitchRange" [value]="value" (change)="onChange()" (input)="onChange()" [disabled]="!enabled">
     </div>
     <div class="col-auto">
-        <span class="form-text">2</span>
+        <span class="form-text">20x</span>
     </div>
 </div>
