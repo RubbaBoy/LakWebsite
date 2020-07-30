@@ -107,12 +107,13 @@ class LakModalComponent {
       var input = row.querySelector('input');
       var label = row.querySelector('label');
 
-      print('${input.id} and ${label.id}');
 
       if ((input == null || label == null) ||
           (input.id != '' || input.id != '')) {
         continue;
       }
+
+      print('${input.id} and ${label.id}');
 
       var id = uuid.v4();
       input.id = id;

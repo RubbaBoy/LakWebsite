@@ -79,6 +79,9 @@ class RequestService {
   Future<void> addSound(String uri) =>
       makeAuthedPostRequest('/sounds/addSound', body: {'uri': uri});
 
+  Future<void> recordSound(String name) =>
+      makeAuthedPostRequest('/sounds/recordSound', body: {'name': name});
+
   Future<SoundVariant> addVariant(String name, String soundId) =>
       makeAuthedPostRequest('/sounds/addVariant',
           body: {'name': name, 'soundId': soundId})

@@ -4,17 +4,24 @@
 <!--        Current active key is: {{ active }}-->
     </p>
 
-    <icon icon="plus" class="clickable-icon mx-auto"></icon>
-    <icon icon="plus" class="clickable-icon mx-auto" [dom]="false"></icon>
-
     <div class="card">
         <div class="card-body">
             <h3>Active keys</h3>
-<!--            <p><span *ngFor="let key of activeKeys.keys">{{ activeKeys[key].primary }}</span></p>-->
+            <p><span *ngFor="let key of keyboardService.activeKeys.keys">{{ keyboardService.activeKeys[key].primary }}</span></p>
 
             <div class="mb-3 row">
                 <p class="col-sm-2">Sound Variant</p>
-<!--                <p class="col-sm-10">{{ displaySoundVariant() }}</p>-->
+                <div class="col-sm-10">
+<!--                    <material-dropdown-select-->
+<!--                            buttonText="{{ variantStatus == VariantStatus.Single ? currVariant : (variantStatus == VariantStatus.Unset ? 'Unset' : 'Mixed') }}"-->
+<!--                            [(selection)]="currVariant"-->
+<!--                            [options]="allVariants">-->
+<!--                    </material-dropdown-select>-->
+
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option *ngFor="let variant of displayingVariants" [class.text-muted]="variant == SoundVariant.NULL || variant == SoundVariant.MIXED">{{ variant.description ?? '-' }}</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>

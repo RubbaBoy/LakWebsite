@@ -1,0 +1,49 @@
+name: Build
+
+on:
+  push:
+    branches:
+      master
+
+jobs:
+  build-windows:
+    name: Deploy
+    runs-on: ubuntu-latest
+    container:
+      image:  google/dart:latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install dependensies
+        run: pub get
+      - run: pub global activate webdev
+      - run: export PATH="$PATH":"$HOME/.pub-cache/bin"
+      - name: Building
+        run: pub global run webdev build --output web:build
+      - name: Cleaning up
+        run: rm -rf build/packages && rm -f build/.build.manifest build/.packages
+      - name: Get branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: get_branch
+      - name: Get commit hash
+        shell: bash
+        run: echo "##[set-output name=hash;]$(echo $(git rev-parse --short "$GITHUB_SHA") | cut -c1-6)"
+        id: get_hash
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: rubbaboy/lak-frontend
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          dockerfile: Dockerfile
+          tags: "${{ steps.get_branch.outputs.branch }}-latest,${{ steps.get_branch.outputs.branch }}-${{ steps.get_hash.outputs.hash }}"
+      - name: Repository published
+        run: echo "docker pull rubbaboy/lak-frontend:${{ steps.get_branch.outputs.branch }}-${{ steps.get_hash.outputs.hash }}"
+      - name: Create docker shield
+        uses: RubbaBoy/BYOB@v1.1.0
+        with:
+          NAME: lak-frontend
+          LABEL: docker
+          STATUS: "lak-frontend:${{ steps.get_branch.outputs.branch }}-${{ steps.get_hash.outputs.hash }}"
+          COLOR: 0576B7
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

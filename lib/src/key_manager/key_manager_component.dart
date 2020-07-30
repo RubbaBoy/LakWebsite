@@ -4,8 +4,11 @@ import 'dart:html';
 import 'package:LakWebsite/src/components/icon/icon_component.dart';
 import 'package:LakWebsite/src/components/key/key_component.dart';
 import 'package:LakWebsite/src/components/keyboard/keyboard_component.dart';
+import 'package:LakWebsite/src/services/cache_service.dart';
 import 'package:LakWebsite/src/services/key/key_enum.dart';
 import 'package:LakWebsite/src/services/keyboard_service.dart';
+import 'package:LakWebsite/src/services/objects/sound.dart';
+import 'package:LakWebsite/src/services/request_utils.dart';
 import 'package:angular/angular.dart';
 
 @Component(
@@ -20,23 +23,77 @@ import 'package:angular/angular.dart';
   providers: [],
   exports: [
     KeySize,
+    VariantStatus,
+    SoundVariant,
   ]
 )
 class KeyManagerComponent implements AfterViewInit {
 
   final KeyboardService keyboardService;
+  final CacheService cacheService;
+  final RequestService requestService;
 
   final streamSubscriptions = <StreamSubscription>[];
   bool ctrlDown = false;
 
-  KeyManagerComponent(this.keyboardService);
+  KeyManagerComponent(this.keyboardService, this.cacheService, this.requestService);
 
   @ViewChild(KeyboardComponent)
   KeyboardComponent keyboard;
 
+  VariantStatus variantStatus = VariantStatus.Single;
+  SoundVariant _currVariant;
+  SoundVariant get currVariant => _currVariant;
+  set currVariant(SoundVariant soundVariant) {
+    print('Setting variant to $soundVariant');
+    _currVariant = soundVariant;
+    for (var key in keyboardService.activeKeys.keys.map(cacheService.getKey)) {
+      key.soundVariant = soundVariant;
+      requestService.updateKey(key);
+    }
+  }
+
+  List<SoundVariant> allVariants = [];
+  List<SoundVariant> get displayingVariants => [
+    if (variantStatus == VariantStatus.Unset) SoundVariant.NULL,
+    if (variantStatus == VariantStatus.Mixed) SoundVariant.MIXED,
+    ...allVariants,
+  ];
+
   @override
   void ngAfterViewInit() {
-    keyboard.onClickKey = (component, key, primary, secondary) => keyboardService.clickKey(KeyData(component, key, primary, secondary), ctrlDown);
+    keyboard.onClickKey = (component, key, primary, secondary) {
+      keyboardService.clickKey(KeyData(component, key, primary, secondary), ctrlDown);
+
+      var keys = keyboardService.activeKeys;
+
+      if (keys.isEmpty) {
+        return null;
+      }
+
+      cacheService.updateVariants().then((value) => allVariants = value);
+
+      print('all = $allVariants');
+
+      var soundVariant = cacheService.getKey(keys.keys.first).soundVariant;
+      for (var keyEnum in keys.keys.skip(1)) {
+        var key = cacheService.getKey(keyEnum);
+        var variant = key.soundVariant;
+
+        if (soundVariant != variant) {
+          variantStatus = VariantStatus.Mixed;
+          break;
+        } else if (soundVariant == null) {
+          variantStatus = VariantStatus.Unset;
+        }
+      }
+
+      if (variantStatus == VariantStatus.Single) {
+        _currVariant = soundVariant;
+      } else {
+        _currVariant = null;
+      }
+    };
 
     streamSubscriptions.addAll([
       document.onKeyDown.listen((event) => ctrlDown = event.ctrlKey),
@@ -49,4 +106,10 @@ class KeyManagerComponent implements AfterViewInit {
     ]);
   }
 
+}
+
+enum VariantStatus {
+  Single,
+  Mixed,
+  Unset
 }

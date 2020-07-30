@@ -18,17 +18,17 @@ class ModulationId {
 
 class Sound {
   final String id;
-  final Uri uri;
+  final String relPath;
 
-  Sound(this.id, this.uri);
+  Sound(this.id, this.relPath);
 
   Sound.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        uri = Uri.parse(json['uri']);
+        relPath = json['relativePath'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'uri': uri,
+        'relativePath': relPath,
       };
 
   @override
@@ -65,6 +65,9 @@ class SoundVariant {
   String description;
   String color;
   List<SoundModulation> modulators;
+
+  static SoundVariant NULL = SoundVariant('null', null, 'Null', null, null);
+  static SoundVariant MIXED = SoundVariant('mixed', null, 'Mixed', null, null);
 
   /// Turns `#AABBCC` into `00AABBCC`, which is what the API requires.
   String get alphaColor => color == null ? null : '00${color.substring(1)}';

@@ -6,9 +6,10 @@
 
             <div class="list-group">
                 <a *ngFor="let sound of sounds" [class.active]="sound == activeSound" class="list-group-item list-group-item-action" (click)="clickSound(sound)">{{
-                    sound.uri.pathSegments.last }}</a>
-                <a class="list-group-item list-group-item-action" (click)="addSound()">
-                    <icon icon="plus" class="clickable-icon mx-auto"></icon>
+                    sound.relPath }}</a>
+                <a class="list-group-item list-group-item-action">
+                    <icon icon="plus" class="clickable-icon mx-auto" (click)="addSound()"></icon>
+                    <icon icon="microphone" class="clickable-icon mx-auto" (click)="recordSound()"></icon>
                 </a>
             </div>
         </div>
@@ -35,7 +36,7 @@
                     <h3><input #nameInput type="text" class="h3 border-none" id="nameInput" [value]="activeVariant?.description"></h3>
 
                     Inspecting sound {{ activeSound?.id }}<br>
-                    Its path: {{ activeSound?.uri }}<br>
+                    Its path: {{ activeSound?.relPath }}<br>
                     Variant ID: {{ activeVariant?.id }}<br>
                     Variant Desc: {{ activeVariant?.description }}<br>
 
@@ -73,9 +74,27 @@
     </div>
 </lak-modal>
 
+<lak-modal #recordSoundModal [title]="'Record Sound'">
+    <p>
+        Input a name and click "Record" to start recording when the blue button is pressed on the keyboard
+    </p>
+
+    <div class="row">
+        <label class="col-3 col-form-label">Sound Name</label>
+        <div class="col-9">
+            <input class="path form-control mb-3" placeholder="Name">
+        </div>
+    </div>
+
+    <div button>
+        <button type="button" class="btn btn-secondary" (click)="recordSoundModal.cancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="recordSoundModal.confirm()">Add Sound</button>
+    </div>
+</lak-modal>
+
 <lak-modal #addVariantModal [title]="'Add Sound Variant'">
     <p>
-        Add a variant for the sound {{ addVariantModal['sound']?.uri?.pathSegments?.last }}
+        Add a variant for the sound {{ addVariantModal['sound']?.relPath }}
     </p>
 
     <div class="row">

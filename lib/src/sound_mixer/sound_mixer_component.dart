@@ -40,6 +40,9 @@ class SoundMixerComponent implements OnInit {
   @ViewChild('addSoundModal', read: LakModalComponent)
   LakModalComponent addSoundModal;
 
+  @ViewChild('recordSoundModal', read: LakModalComponent)
+  LakModalComponent recordSoundModal;
+
   @ViewChild('addVariantModal', read: LakModalComponent)
   LakModalComponent addVariantModal;
 
@@ -116,7 +119,8 @@ class SoundMixerComponent implements OnInit {
       ..color = colorComponent.value;
 
     requestService.updateVariant(activeVariant.id,
-        color: activeVariant.alphaColor, description: activeVariant.description);
+        color: activeVariant.alphaColor,
+        description: activeVariant.description);
 
     for (var modulator in modulators) {
       modulator.save();
@@ -133,6 +137,19 @@ class SoundMixerComponent implements OnInit {
         },
         elementCallback: {
           'path': LakModalComponent.inputValue,
+        });
+  }
+
+  void recordSound() {
+    recordSoundModal.openPrompt(
+        onConfirm: (data) {
+          requestService.recordSound(data['name']).then((_) => reloadSounds());
+        },
+        onCancel: () {
+          print('Cancelling in here');
+        },
+        elementCallback: {
+          'name': LakModalComponent.inputValue,
         });
   }
 

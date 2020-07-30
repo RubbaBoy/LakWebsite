@@ -95,7 +95,6 @@ class KeyComponent extends AfterViewInit {
     var variant = key?.soundVariant;
     if (variant != null) {
       root.classes.add('has-variant');
-      print(variant.color);
       variantColor = '#${variant.color}';
     }
   }

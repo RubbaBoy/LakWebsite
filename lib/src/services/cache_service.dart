@@ -40,6 +40,8 @@ class CacheService {
       await requestService.listKeys().then((keys) =>
           _keys = keys.map<Key>((key) => Key.fromJson(this, key)).toList());
 
+  List<SoundVariant> getVariants() => _soundVariants;
+
   /// Gets a [Sound] from a given sound UUID [soundId].
   Sound getSound(String soundId) =>
       _sounds?.firstWhere((sound) => sound.id == soundId, orElse: () => null);
