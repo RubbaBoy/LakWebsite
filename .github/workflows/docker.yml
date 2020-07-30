@@ -32,6 +32,9 @@ jobs:
         run: |
           echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
           echo "##[set-output name=hash;]$(echo $(git rev-parse --short "$GITHUB_SHA") | cut -c1-6)"
+      - name: Prepare 2
+        id: prepare2
+        run: |
           echo ::set-output name=docker_image::${DOCKER_REGISTRY}/${DOCKER_IMAGE}
           echo ::set-output name=version::${{ steps.prepare.outputs.branch }}-${{ steps.prepare.outputs.hash }}
       - name: Set up Docker Buildx
@@ -43,7 +46,7 @@ jobs:
         run: echo "${DOCKER_PASSWORD}" | docker login ${DOCKER_REGISTRY} --username "${DOCKER_USERNAME}" --password-stdin
       - name: Run Buildx
         if: success()
-        run: docker buildx build --platform linux/arm/7 --tag ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }} --output type=image,push=true .
+        run: docker buildx build --platform linux/arm/7 --tag ${{ steps.prepare2.outputs.docker_image }}:${{ steps.prepare2.outputs.version }} --output type=image,push=true .
       - name: Create docker shield
         uses: RubbaBoy/BYOB@v1.1.0
         with:
