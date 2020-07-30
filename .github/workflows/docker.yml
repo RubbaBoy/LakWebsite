@@ -1,44 +1,52 @@
 name: Build
 
-on:
-  push:
-    branches:
-      master
+on: [push]
 
 jobs:
   build-windows:
     name: Deploy
-    runs-on: ubuntu-latest
-    container:
-      image:  google/dart:latest
+    runs-on: ubuntu-18.04
+    env:
+      DOCKER_REGISTRY: registry.hub.docker.com
+      DOCKER_IMAGE: rubbaboy/lak-frontend
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DOCKER_TARGET_PLATFORM: linux/arm/v7
     steps:
       - uses: actions/checkout@v1
+      - name: Setup Dart Action
+        uses: cedx/setup-dart@v2.2.0
       - name: Install dependensies
         run: pub get
-      - run: pub global activate webdev
-      - run: export PATH="$PATH":"$HOME/.pub-cache/bin"
+      - name: Activate webdev
+        run: |
+          pub global activate webdev
+          export PATH="$PATH":"$HOME/.pub-cache/bin"
       - name: Building
         run: pub global run webdev build --output web:build
       - name: Cleaning up
         run: rm -rf build/packages && rm -f build/.build.manifest build/.packages
-      - name: Get branch name
+      - name: Prepare Branches
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: get_branch
-      - name: Get commit hash
-        shell: bash
-        run: echo "##[set-output name=hash;]$(echo $(git rev-parse --short "$GITHUB_SHA") | cut -c1-6)"
-        id: get_hash
-      - name: Publish to Registry
-        uses: elgohr/Publish-Docker-Github-Action@master
+        id: prepare
+        run: |
+          echo ::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})
+          echo ::set-output name=hash::$(echo $(git rev-parse --short "$GITHUB_SHA") | cut -c1-6)
+      - name: Prepare Docker
+        id: prepare_docker
+        run: |
+          echo ::set-output name=docker_image::${DOCKER_REGISTRY}/${DOCKER_IMAGE}
+          echo ::set-output name=version::${{ steps.prepare.outputs.branch }}-${{ steps.prepare.outputs.hash }}
+      - name: Set up Docker Buildx
+        uses: crazy-max/ghaction-docker-buildx@v3
         with:
-          name: rubbaboy/lak-frontend
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          dockerfile: Dockerfile
-          tags: "${{ steps.get_branch.outputs.branch }}-latest,${{ steps.get_branch.outputs.branch }}-${{ steps.get_hash.outputs.hash }}"
-      - name: Repository published
-        run: echo "docker pull rubbaboy/lak-frontend:${{ steps.get_branch.outputs.branch }}-${{ steps.get_hash.outputs.hash }}"
+          buildx-version: latest
+      - name: Docker Login
+        if: success()
+        run: echo "${DOCKER_PASSWORD}" | docker login ${DOCKER_REGISTRY} --username "${DOCKER_USERNAME}" --password-stdin
+      - name: Run Buildx
+        if: success()
+        run: docker buildx build --platform linux/arm/7 --tag ${{ steps.prepare_docker.outputs.docker_image }}:${{ steps.prepare_docker.outputs.version }} --output type=image,push=true .
       - name: Create docker shield
         uses: RubbaBoy/BYOB@v1.1.0
         with:
