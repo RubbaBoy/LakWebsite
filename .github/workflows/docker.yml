@@ -12,8 +12,10 @@ jobs:
         uses: cedx/setup-dart@v2.2.0
       - name: Install dependensies
         run: pub get
-      - run: pub global activate webdev
-      - run: export PATH="$PATH":"$HOME/.pub-cache/bin"
+      - name: Activate webdev
+        run: |
+          pub global activate webdev
+          export PATH="$PATH":"$HOME/.pub-cache/bin"
       - name: Building
         run: pub global run webdev build --output web:build
       - name: Cleaning up
@@ -33,9 +35,7 @@ jobs:
         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login registry.hub.docker.com --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
       - name: Run Buildx
         if: success()
-        run: docker buildx build --platform linux/arm/7 --tag registry.hub.docker.com/rubbaboy/lak-frontend:${{ steps.get_branch.outputs.branch }}-${{ steps.get_hash.outputs.hash }} --file ./Dockerfile --output type=image,push=true .
-      - name: Repository published
-        run: echo "docker pull rubbaboy/lak-frontend:${{ steps.prepare.outputs.branch }}-${{ steps.prepare.outputs.hash }}"
+        run: docker buildx build --platform linux/arm/7 --tag registry.hub.docker.com/rubbaboy/lak-frontend:${{ steps.prepare.outputs.branch }}-${{ steps.prepare.outputs.hash }} --file ./Dockerfile --output type=image,push=true .
       - name: Create docker shield
         uses: RubbaBoy/BYOB@v1.1.0
         with:
