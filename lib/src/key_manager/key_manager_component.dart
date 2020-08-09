@@ -41,6 +41,9 @@ class KeyManagerComponent implements AfterViewInit {
   @ViewChild(KeyboardComponent)
   KeyboardComponent keyboard;
 
+  @ViewChild('selectShit')
+  SelectElement selector;
+
   VariantStatus variantStatus = VariantStatus.Single;
   SoundVariant _currVariant;
   SoundVariant get currVariant => _currVariant;
@@ -75,6 +78,7 @@ class KeyManagerComponent implements AfterViewInit {
 
       print('all = $allVariants');
 
+      variantStatus = VariantStatus.Single;
       var soundVariant = cacheService.getKey(keys.keys.first).soundVariant;
       for (var keyEnum in keys.keys.skip(1)) {
         var key = cacheService.getKey(keyEnum);
@@ -104,6 +108,12 @@ class KeyManagerComponent implements AfterViewInit {
         }
       }),
     ]);
+  }
+
+  void onChange() {
+    var current = displayingVariants[selector.selectedIndex];
+    print('chanbged to ${current.id}');
+    currVariant = current;
   }
 
 }

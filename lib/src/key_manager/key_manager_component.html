@@ -18,8 +18,8 @@
 <!--                            [options]="allVariants">-->
 <!--                    </material-dropdown-select>-->
 
-                    <select class="form-control" id="exampleFormControlSelect1">
-                        <option *ngFor="let variant of displayingVariants" [class.text-muted]="variant == SoundVariant.NULL || variant == SoundVariant.MIXED">{{ variant.description ?? '-' }}</option>
+                    <select #selectShit class="form-control" (change)="onChange()">
+                        <option *ngFor="let variant of displayingVariants" [class.text-muted]="variant == SoundVariant.NULL || variant == SoundVariant.MIXED" [selected]="variant == currVariant">{{ variant.description ?? '-' }}</option>
                     </select>
                 </div>
             </div>

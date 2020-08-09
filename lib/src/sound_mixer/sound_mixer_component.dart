@@ -9,6 +9,7 @@ import 'package:LakWebsite/src/components/modulators/volume_component/volume_com
 import 'package:LakWebsite/src/services/cache_service.dart';
 import 'package:LakWebsite/src/services/objects/sound.dart';
 import 'package:LakWebsite/src/services/request_utils.dart';
+import 'package:LakWebsite/src/utility/utility.dart';
 import 'package:angular/angular.dart';
 
 @Component(
@@ -88,7 +89,7 @@ class SoundMixerComponent implements OnInit {
           .where((element) => element.sound == sound)
           .toList(growable: false);
 
-      clickVariant(displayingVariants.first);
+      clickVariant(displayingVariants.safeFirst);
     }
   }
 

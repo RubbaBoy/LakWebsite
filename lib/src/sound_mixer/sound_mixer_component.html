@@ -7,10 +7,14 @@
             <div class="list-group">
                 <a *ngFor="let sound of sounds" [class.active]="sound == activeSound" class="list-group-item list-group-item-action" (click)="clickSound(sound)">{{
                     sound.relPath }}</a>
-                <a class="list-group-item list-group-item-action">
-                    <icon icon="plus" class="clickable-icon mx-auto" (click)="addSound()"></icon>
-                    <icon icon="microphone" class="clickable-icon mx-auto" (click)="recordSound()"></icon>
-                </a>
+                <div class="list-group-item list-group-item-action icon-section">
+                    <div class="d-inline-block w-50 left-section" (click)="addSound()">
+                        <icon icon="plus" class="clickable-icon left-icon"></icon>
+                    </div>
+                    <div class="d-inline-block w-50 right-section" (click)="recordSound()">
+                        <icon icon="microphone" class="clickable-icon right-icon"></icon>
+                    </div>
+                </div>
             </div>
         </div>
 

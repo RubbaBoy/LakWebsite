@@ -18,14 +18,17 @@ class RequestService {
           Map<String, String> query,
           dynamic body,
           Map<String, String> requestHeaders,
-          void onProgress(ProgressEvent e)}) =>
-      HttpRequest.request('$baseUrl$url${joinQuery(query)}',
-              method: method,
-              requestHeaders: requestHeaders,
-              sendData: body == null ? null : jsonEncode(body),
-              onProgress: onProgress)
-          .then((HttpRequest xhr) =>
-              RequestResponse(xhr.status, jsonDecode(xhr.responseText)));
+          void onProgress(ProgressEvent e)}) => HttpRequest.request('$baseUrl$url${joinQuery(query)}',
+          method: method,
+          requestHeaders: requestHeaders,
+          sendData: body == null ? null : jsonEncode(body),
+          onProgress: onProgress)
+      .catchError((error) {
+        print(error);
+      })
+          .then((HttpRequest xhr) {
+        return RequestResponse(xhr.status, jsonDecode(xhr.responseText));
+          });
 
   Future<RequestResponse> makeAuthedRequest(String url,
           {String method = 'GET',
@@ -76,8 +79,8 @@ class RequestService {
               .map<SoundVariant>((variant) => SoundVariant.fromJson(variant))
               .toList());
 
-  Future<void> addSound(String uri) =>
-      makeAuthedPostRequest('/sounds/addSound', body: {'uri': uri});
+  Future<void> addSound(String path) =>
+      makeAuthedPostRequest('/sounds/addSound', body: {'relPath': path});
 
   Future<void> recordSound(String name) =>
       makeAuthedPostRequest('/sounds/recordSound', body: {'name': name});
@@ -120,8 +123,11 @@ class RequestService {
       .then((response) => List.of(response.json));
 
   Future<void> updateKey(Key key) =>
-      makeAuthedPostRequest('/sounds/updateModulator', body: {
-        'key': key.key.linuxCode,
+      makeAuthedPostRequest('/keys/update', body: {
+        'key': {
+          'linuxCode': key.key.linuxCode,
+          'shift': key.key.shift,
+        },
         'variantId': key.soundVariant.id,
         'loop': key.loop,
       });

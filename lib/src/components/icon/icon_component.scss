@@ -13,3 +13,11 @@
         height: 1rem;
     }
 }
+
+:host.right-icon:before {
+    margin-left: 50%;
+}
+
+:host.left-icon:before {
+    margin-left: calc(50% - 1rem);
+}
