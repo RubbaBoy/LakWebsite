@@ -44,11 +44,10 @@ class KeyManagerComponent implements AfterViewInit {
   @ViewChild('selectShit')
   SelectElement selector;
 
-  VariantStatus variantStatus = VariantStatus.Single;
+  VariantStatus variantStatus = VariantStatus.Unset;
   SoundVariant _currVariant;
   SoundVariant get currVariant => _currVariant;
   set currVariant(SoundVariant soundVariant) {
-    print('Setting variant to $soundVariant');
     _currVariant = soundVariant;
     for (var key in keyboardService.activeKeys.keys.map(cacheService.getKey)) {
       key.soundVariant = soundVariant;
@@ -71,12 +70,12 @@ class KeyManagerComponent implements AfterViewInit {
       var keys = keyboardService.activeKeys;
 
       if (keys.isEmpty) {
+        _currVariant = null;
+        variantStatus = VariantStatus.Unset;
         return null;
       }
 
       cacheService.updateVariants().then((value) => allVariants = value);
-
-      print('all = $allVariants');
 
       variantStatus = VariantStatus.Single;
       var soundVariant = cacheService.getKey(keys.keys.first).soundVariant;
@@ -110,12 +109,7 @@ class KeyManagerComponent implements AfterViewInit {
     ]);
   }
 
-  void onChange() {
-    var current = displayingVariants[selector.selectedIndex];
-    print('chanbged to ${current.id}');
-    currVariant = current;
-  }
-
+  void onChange() => currVariant = displayingVariants[selector.selectedIndex];
 }
 
 enum VariantStatus {

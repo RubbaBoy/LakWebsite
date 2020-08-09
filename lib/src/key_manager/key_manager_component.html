@@ -1,25 +1,23 @@
 <div class="container">
     <h1 class="mb-3">Key Manager</h1>
-    <p>
-<!--        Current active key is: {{ active }}-->
-    </p>
 
-    <div class="card">
+    <div class="card mb-4">
         <div class="card-body">
             <h3>Active keys</h3>
-            <p><span *ngFor="let key of keyboardService.activeKeys.keys">{{ keyboardService.activeKeys[key].primary }}</span></p>
+            <p>
+                <span *ngIf="keyboardService.activeKeys.keys.isEmpty" class="text-muted">No keys selected</span>
+                <span *ngFor="let key of keyboardService.activeKeys.keys" class="mx-2">{{ keyboardService.activeKeys[key].primary }}</span>
+            </p>
 
             <div class="mb-3 row">
                 <p class="col-sm-2">Sound Variant</p>
                 <div class="col-sm-10">
-<!--                    <material-dropdown-select-->
-<!--                            buttonText="{{ variantStatus == VariantStatus.Single ? currVariant : (variantStatus == VariantStatus.Unset ? 'Unset' : 'Mixed') }}"-->
-<!--                            [(selection)]="currVariant"-->
-<!--                            [options]="allVariants">-->
-<!--                    </material-dropdown-select>-->
-
-                    <select #selectShit class="form-control" (change)="onChange()">
-                        <option *ngFor="let variant of displayingVariants" [class.text-muted]="variant == SoundVariant.NULL || variant == SoundVariant.MIXED" [selected]="variant == currVariant">{{ variant.description ?? '-' }}</option>
+                    <select #selectShit class="form-control" (change)="onChange()"
+                            [disabled]="keyboardService.activeKeys.keys.isEmpty">
+                        <option *ngFor="let variant of displayingVariants"
+                                [class.text-muted]="variant == SoundVariant.NULL || variant == SoundVariant.MIXED"
+                                [selected]="variant == currVariant"
+                                [style.color]="variant?.color ?? 'FFFFFF'">{{ variant.description ?? '-' }}</option>
                     </select>
                 </div>
             </div>

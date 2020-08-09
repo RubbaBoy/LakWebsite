@@ -66,7 +66,7 @@ class SoundVariant {
   String color;
   List<SoundModulation> modulators;
 
-  static SoundVariant NULL = SoundVariant('null', null, 'Null', null, null);
+  static SoundVariant NULL = SoundVariant('null', null, 'Unset', null, null);
   static SoundVariant MIXED = SoundVariant('mixed', null, 'Mixed', null, null);
 
   /// Turns `#AABBCC` into `00AABBCC`, which is what the API requires.

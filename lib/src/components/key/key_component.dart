@@ -93,9 +93,10 @@ class KeyComponent extends AfterViewInit {
 
     var key = cacheService.getKey(this.key);
     var variant = key?.soundVariant;
+    print('Initting key ${key?.key?.code}: ${variant?.color}');
     if (variant != null) {
       root.classes.add('has-variant');
-      variantColor = '#${variant.color}';
+      variantColor = '${variant.color}';
     }
   }
 }
