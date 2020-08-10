@@ -7,11 +7,14 @@
             <div class="list-group">
                 <a *ngFor="let sound of sounds" [class.active]="sound == activeSound" class="list-group-item list-group-item-action" (click)="clickSound(sound)">{{
                     sound.relPath }}</a>
-                <div class="list-group-item list-group-item-action icon-section">
-                    <div class="d-inline-block w-50 left-section" (click)="addSound()">
+                <div class="list-group-item list-group-item-action icon-section row-cols-3">
+                    <div class="d-inline-block col left-section" (click)="addSound()">
                         <icon icon="plus" class="clickable-icon left-icon"></icon>
                     </div>
-                    <div class="d-inline-block w-50 right-section" (click)="recordSound()">
+                    <div class="d-inline-block col middle-section" (click)="uploadSound()">
+                        <icon icon="file" class="clickable-icon middle-icon"></icon>
+                    </div>
+                    <div class="d-inline-block col right-section" (click)="recordSound()">
                         <icon icon="microphone" class="clickable-icon right-icon"></icon>
                     </div>
                 </div>
@@ -37,7 +40,9 @@
         <div class="col-12 col-lg-8 pl-lg-4 mt-4 mt-lg-0">
             <div class="card">
                 <div class="card-body">
-                    <h3><input #nameInput type="text" class="h3 border-none" id="nameInput" [value]="activeVariant?.description"></h3>
+                    <h3>
+                        <input #nameInput type="text" class="h3 border-none" id="nameInput" [value]="activeVariant?.description">
+                    </h3>
 
                     Inspecting sound {{ activeSound?.id }}<br>
                     Its path: {{ activeSound?.relPath }}<br>
@@ -86,7 +91,7 @@
     <div class="row">
         <label class="col-3 col-form-label">Sound Name</label>
         <div class="col-9">
-            <input class="path form-control mb-3" placeholder="Name">
+            <input class="name form-control mb-3" placeholder="Name">
         </div>
     </div>
 
@@ -95,6 +100,26 @@
         <button type="button" class="btn btn-primary" (click)="recordSoundModal.confirm()">Add Sound</button>
     </div>
 </lak-modal>
+
+
+<iframe name="dummyframe" id="dummyframe" style="display: none;" (load)="reloadSounds()"></iframe>
+<form #form method="POST" enctype="multipart/form-data" [action]="BASE_URL + '/sounds/uploadSound'" target="dummyframe">
+    <lak-modal #uploadSoundModal [title]="'Upload Sound'">
+        <p>
+            Upload a sound file to add to the system
+        </p>
+
+
+        <div class="row">
+            <input type="file" #fileUpload name="file">
+        </div>
+
+        <div button>
+            <button type="button" class="btn btn-secondary" (click)="uploadSoundModal.cancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary" (click)="uploadSoundModal.confirm()">Upload Sound</button>
+        </div>
+    </lak-modal>
+</form>
 
 <lak-modal #addVariantModal [title]="'Add Sound Variant'">
     <p>

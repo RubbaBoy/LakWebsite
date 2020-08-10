@@ -104,6 +104,8 @@ class KeyManagerComponent implements AfterViewInit {
       document.onKeyDown.listen((event) {
         if (event.key == 'Escape') {
           keyboardService.clearActive();
+          _currVariant = null;
+          variantStatus = VariantStatus.Unset;
         }
       }),
     ]);

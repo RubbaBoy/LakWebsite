@@ -9,6 +9,7 @@ import 'package:LakWebsite/src/components/modulators/volume_component/volume_com
 import 'package:LakWebsite/src/services/cache_service.dart';
 import 'package:LakWebsite/src/services/objects/sound.dart';
 import 'package:LakWebsite/src/services/request_utils.dart';
+import 'package:LakWebsite/src/utility/constants.dart';
 import 'package:LakWebsite/src/utility/utility.dart';
 import 'package:angular/angular.dart';
 
@@ -25,6 +26,7 @@ import 'package:angular/angular.dart';
     NgFor,
     NgIf,
   ],
+  exports: [BASE_URL],
   providers: [],
   pipes: [commonPipes],
 )
@@ -44,11 +46,17 @@ class SoundMixerComponent implements OnInit {
   @ViewChild('recordSoundModal', read: LakModalComponent)
   LakModalComponent recordSoundModal;
 
+  @ViewChild('uploadSoundModal', read: LakModalComponent)
+  LakModalComponent uploadSoundModal;
+
   @ViewChild('addVariantModal', read: LakModalComponent)
   LakModalComponent addVariantModal;
 
   @ViewChild('nameInput')
   InputElement nameInput;
+
+  @ViewChild('form')
+  FormElement formElem;
 
   @ViewChild(ColorComponent)
   ColorComponent colorComponent;
@@ -153,6 +161,8 @@ class SoundMixerComponent implements OnInit {
           'name': LakModalComponent.inputValue,
         });
   }
+
+  void uploadSound() => uploadSoundModal.openPrompt();
 
   void addVariant() {
     addVariantModal.openPrompt(

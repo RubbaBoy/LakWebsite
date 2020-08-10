@@ -15,9 +15,13 @@
 }
 
 :host.right-icon:before {
-    margin-left: 50%;
+    margin-left: calc(50% - 0.25rem);
+}
+
+:host.middle-icon:before {
+    margin-left: calc(50% - 0.5rem);
 }
 
 :host.left-icon:before {
-    margin-left: calc(50% - 1rem);
+    margin-left: calc(50% - 0.75rem);
 }

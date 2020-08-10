@@ -48,9 +48,10 @@ class LakModalComponent {
   void confirm() {
     _hideStuff();
 
-    onConfirm?.call(elementCallback.map((selector, callback) =>
-        MapEntry(selector, callback(root.querySelector('.$selector'))))
-      ..removeWhere((key, value) => value == null));
+    var elements = elementCallback?.map((selector, callback) =>
+        MapEntry(selector, callback(root.querySelector('.$selector'))));
+    elements?.removeWhere((key, value) => value == null);
+    onConfirm?.call(elements ?? const {});
   }
 
   void _hideStuff() {
@@ -86,7 +87,7 @@ class LakModalComponent {
     });
   }
 
-  static final inputValue = (InputElement input) => input.value;
+  static final inputValue = (InputElement input) => input?.value;
 
   @override
   operator [](key) => content[key];

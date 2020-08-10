@@ -13,16 +13,20 @@
             background-color: inherit;
         }
 
-        .left-section:hover, .right-section:hover {
+        .left-section:hover, .middle-section:hover, .right-section:hover {
             background-color: #f8f9fa;
         }
 
         .left-section {
-            padding: 0.5rem 0 0.5rem 1rem;
+            padding: 0.5rem 0 0.5rem 0.5rem;
+        }
+
+        .middle-section {
+            padding: 0.5rem 0 0.5rem 0;
         }
 
         .right-section {
-            padding: 0.5rem 1rem 0.5rem 0;
+            padding: 0.5rem 0.5rem 0.5rem 0;
         }
     }
 }

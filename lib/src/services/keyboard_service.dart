@@ -26,8 +26,6 @@ class KeyboardService {
       keyData.component.active = true;
       activeKeys[key] = keyData;
     }
-
-//    active = activeKeys.values.map((data) => data.component.text).join(', ');
   }
 
   void clearActive() {
@@ -35,7 +33,6 @@ class KeyboardService {
       key.component.active = false;
     }
 
-//    active = '';
     activeKeys.clear();
   }
 

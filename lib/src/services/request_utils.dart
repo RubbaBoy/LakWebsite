@@ -18,15 +18,16 @@ class RequestService {
           Map<String, String> query,
           dynamic body,
           Map<String, String> requestHeaders,
-          void onProgress(ProgressEvent e)}) => HttpRequest.request('$baseUrl$url${joinQuery(query)}',
+          void onProgress(ProgressEvent e),
+          bool json = true}) => HttpRequest.request('$baseUrl$url${joinQuery(query)}',
           method: method,
           requestHeaders: requestHeaders,
-          sendData: body == null ? null : jsonEncode(body),
+          sendData: body == null ? null : (json ? jsonEncode(body) : body),
           onProgress: onProgress)
       .catchError((error) {
         print(error);
       })
-          .then((HttpRequest xhr) {
+      .then((HttpRequest xhr) {
         return RequestResponse(xhr.status, jsonDecode(xhr.responseText));
           });
 
